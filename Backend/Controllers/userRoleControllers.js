@@ -6,8 +6,8 @@ import Role from "../models/userRoleModel.js";
 //@route /api/userRole/createRole
 //@access PUBLIC
 const createUserRole = expressAsyncHandler( async(req,res) => {
-    const {role} = req.body
-    const slug = slugify(role)
+    const {name} = req.body
+    const slug = slugify(name)
     const roleExists = await Role.findOne({slug})
     if(roleExists){
         res.status(404)
@@ -15,13 +15,13 @@ const createUserRole = expressAsyncHandler( async(req,res) => {
     }
 
     const newRole = await Role.create({
-        role,
+        name,
         slug
     })
     if(newRole) {
         res.status(201).json({
             id: newRole._id,
-            role: newRole.role,
+            name: newRole.name,
             slug: newRole.slug
         })
     }else {
@@ -34,10 +34,10 @@ const createUserRole = expressAsyncHandler( async(req,res) => {
 //@route /api/userRole/deleteRole
 //@access PUBLIC
 const deleteUserRole = expressAsyncHandler( async(req,res) => {
-    const role = await Role.findOne(req.params.slug)
+    const role = await Role.findOne({slug:req.params.slug})
     if(role) {
-        await Role.remove()
-        res.json({ message: "User removed" })
+        await role.remove()
+        res.json({ message: "User Role removed" })
     } else {
         res.status(404)
         throw new Error('Role not found')
