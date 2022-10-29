@@ -79,7 +79,7 @@ const authUser = expressAsyncHandler(async(req,res) => {
 //@route /api/users/getProfile
 //@access PUBLIC
 const getProfile = expressAsyncHandler( async(req,res) => {
-    const user = await User.findOne(req.params.email)
+    const user = await User.findOne(req.params.id)
 
     if(user) {
         res.status(201).json({

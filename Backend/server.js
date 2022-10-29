@@ -4,6 +4,7 @@ import colors from 'colors'
 import connectDB from './Config/db.js'
 import { notFound,errorHandler } from "./Middleware/errorHandler.js";
 import userRoutes from './routes/userRoutes.js'
+import userRoleRoutes from './routes/userRoleRoutes.js'
 
 const app = express()
 
@@ -16,6 +17,7 @@ app.get('/', (req,res) => {
 
 app.use(express.json())
 app.use('/api/users', userRoutes)
+app.use('/api/userRoles', userRoleRoutes)
 
 app.use(notFound)
 app.use(errorHandler)
