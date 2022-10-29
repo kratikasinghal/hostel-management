@@ -59,7 +59,7 @@ const authUser = expressAsyncHandler(async(req,res) => {
 
     const user = await User.findOne({email})
     if(user && (await bcrypt.compare(password, user.password))) {
-        res.json({
+        res.status(201).json({
             firstName: user.firstName,
                 lastName: user.lastName,
                 email: user.email,
@@ -74,4 +74,35 @@ const authUser = expressAsyncHandler(async(req,res) => {
         throw new Error('Invalid Email and Password')
     }
 })
-export {registerUser, authUser}
+
+//@desc get user Profile
+//@route /api/users/getProfile
+//@access PUBLIC
+const getProfile = expressAsyncHandler( async(req,res) => {
+    const user = await User.findOne(req.params.email)
+
+    if(user) {
+        res.status(201).json({
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            phoneNumber: user.phoneNumber,
+            address: user.address,
+            password: user.password,
+            userRole: user.userRole,
+        })
+    }else{
+        res.status(404)
+        throw new Error('User not Found')
+    }
+})
+
+//@desc get users
+//@route /api/users/getUsers
+//@access PUBLIC
+const getUsers = expressAsyncHandler( async(req,res) => {
+    const users = await User.find({})
+
+    res.json(users)
+})
+export {registerUser, authUser, getProfile, getUsers}
