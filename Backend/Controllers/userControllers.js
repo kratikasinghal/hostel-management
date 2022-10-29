@@ -46,4 +46,32 @@ const registerUser = expressAsyncHandler( async(req,res) => {
     }
 })
 
-export {registerUser}
+//@desc Login User
+//@route /api/users/login
+//@access PUBLIC
+const authUser = expressAsyncHandler(async(req,res) => {
+    const {email, password} = req.body
+
+    if(!(email && password)) {
+        res.status(400)
+        throw new Error("All inputs are required")
+    }
+
+    const user = await User.findOne({email})
+    if(user && (await bcrypt.compare(password, user.password))) {
+        res.json({
+            firstName: user.firstName,
+                lastName: user.lastName,
+                email: user.email,
+                phoneNumber: user.phoneNumber,
+                address: user.address,
+                password: user.password,
+                userRole: user.userRole,
+                token: generateToken(user.email)
+        })
+    }else{
+        res.status(401)
+        throw new Error('Invalid Email and Password')
+    }
+})
+export {registerUser, authUser}
