@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const userRoleSchema = mongoose.Schema({
-    role: {
+    name: {
         type: String
     }, 
     slug: {
