@@ -20,7 +20,6 @@ const createUserRole = expressAsyncHandler( async(req,res) => {
     })
     if(newRole) {
         res.status(201).json({
-            id: newRole._id,
             name: newRole.name,
             slug: newRole.slug
         })
