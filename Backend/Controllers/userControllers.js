@@ -33,7 +33,6 @@ const registerUser = expressAsyncHandler( async(req,res) => {
                 email: user.email,
                 phoneNumber: user.phoneNumber,
                 address: user.address,
-                password: user.password,
                 token: generateToken(user.email),
                 userRole: user.userRole
             })
@@ -61,12 +60,12 @@ const authUser = expressAsyncHandler(async(req,res) => {
     const user = await User.findOne({email})
     if(user && (await bcrypt.compare(password, user.password))) {
         res.status(201).json({
+            id: user._id,
             firstName: user.firstName,
             lastName: user.lastName,
             email: user.email,
             phoneNumber: user.phoneNumber,
             address: user.address,
-            password: user.password,
             userRole: user.userRole,
             token: generateToken(user.email)
         })
@@ -103,8 +102,14 @@ const getProfile = expressAsyncHandler( async(req,res) => {
 //@route /api/users/getUsers
 //@access PUBLIC
 const getUsers = expressAsyncHandler( async(req,res) => {
+    const query = {}
+    if(Array.isArray(req.query.includedRoles)){
+        query.userRole = {$in:req.query.includedRoles}
+    }else if(req.query.includedRoles) {
+        query.userRole = {$in:[req.query.includedRoles]}
+    }
     try{
-        const users = await User.find({}).populate([{path:"userRoleInfo", select:"name slug"}])
+        const users = await User.find(query).populate([{path:"userRoleInfo", select:"name slug"}])
 
         res.json(users)
     }catch(error){
@@ -137,7 +142,6 @@ const updateProfile = expressAsyncHandler(async(req,res)=> {
             address: updatedUser.address,
             password: updatedUser.password,
             userRole: updatedUser.userRole,
-            token: generateToken(user.email)
         })
     } else {
         res.status(404)
@@ -148,7 +152,7 @@ const updateProfile = expressAsyncHandler(async(req,res)=> {
 //@desc Update user role
 //@route /api/users/updateUserRole
 const updateUserRole = expressAsyncHandler(async(req,res) => {
-    const user = await User.findOne({email:req.user.email})
+    const user = await User.findOne({email:req.body.email})
     if(user) {
         user.userRole = req.body.userRole || user.userRole
 
