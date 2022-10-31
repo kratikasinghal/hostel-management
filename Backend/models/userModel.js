@@ -38,8 +38,7 @@ const userSchema = mongoose.Schema({
 userSchema.virtual('userRoleInfo',{
     ref: 'Role',
     localField: 'userRole',
-    foreignField: 'slug',
-    justOne: true
+    foreignField: 'slug'
 });
 
 const User = mongoose.model('User', userSchema)

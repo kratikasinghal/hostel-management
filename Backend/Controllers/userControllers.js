@@ -76,12 +76,12 @@ const authUser = expressAsyncHandler(async(req,res) => {
 })
 
 //@desc get user Profile
-//@route /api/users/getProfile
+//@route /api/users/:id
 //@access PROTECTED
 const getProfile = expressAsyncHandler( async(req,res) => {
     
     const user = await User.findOne({_id:new mongoose.Types.ObjectId(req.params.id)}).populate([{path:"userRoleInfo", select:"name slug"}])
-
+    
     if(user) {
         res.status(201).json({
             firstName: user.firstName,
@@ -110,8 +110,19 @@ const getUsers = expressAsyncHandler( async(req,res) => {
     }
     try{
         const users = await User.find(query).populate([{path:"userRoleInfo", select:"name slug"}])
-
-        res.json(users)
+        const usersInfo = []
+        for(let user of users) {
+            let info = {}
+            info.firstName= user.firstName,
+            info.lastName= user.lastName,
+            info.email= user.email,
+            info.phoneNumber= user.phoneNumber,
+            info.address= user.address,
+            info.userRole= user.userRole,
+            info.userRoleInfo= user.userRoleInfo
+            usersInfo.push(info)
+        }
+        res.json(usersInfo)
     }catch(error){
         console.log(error)
     }
