@@ -60,11 +60,10 @@ complaintSchema.virtual('assignedPersonInfo',{
     justOne: true
 });
 
-complaintSchema.virtual('standardCompalintDescriptionInfo', {
+complaintSchema.virtual('standardComplaintDescriptionInfo', {
     ref: 'Services',
     localField: 'descriptionStandard',
-    foreignField: 'slug',
-    justOne: true
+    foreignField: 'slug'
 })
 const Complaint = mongoose.model("Complaint", complaintSchema)
 export default Complaint

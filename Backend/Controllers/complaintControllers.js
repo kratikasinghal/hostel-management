@@ -96,6 +96,7 @@ const getForAdmin = expressAsyncHandler(async (req, res) => {
     const complaints = await Complaint.find(query).populate([
       { path: "complaintCreatorInfo", select: q },
       { path: "assignedPersonInfo", select: q },
+      { path: "standardComplaintDescriptionInfo", select:"description"}
     ]);
     const complaintsInfo = [];
     for (let complaint of complaints) {
@@ -114,6 +115,7 @@ const getForAdmin = expressAsyncHandler(async (req, res) => {
       info.descriptionStandard = complaint.descriptionStandard;
       info.descriptionCustom = complaint.descriptionCustom;
       info.otpAssigned = complaint.otpAssigned;
+      info.standardComplaintDescriptionInfo = complaint.standardComplaintDescriptionInfo
       complaintsInfo.push(info);
     }
     res.status(201).send(complaintsInfo);
@@ -142,7 +144,7 @@ const updateAdmin = expressAsyncHandler(async (req, res) => {
         {
           path: "assignedPersonInfo",
           select: "email firstName lastName phoneNumber address userRole",
-        },
+        }
       ]);
       res.json({
         status: updatedComplaint.status,
@@ -176,12 +178,20 @@ const updateResident = expressAsyncHandler(async (req, res) => {
       complaint.descriptionStandard = req.body.descriptionStandard
     }
 
-    const updatedComplaint = await complaint.save()
+    let updatedComplaint = await complaint.save()
+    updatedComplaint = await Complaint.findById(
+      updatedComplaint._id
+    ).populate([
+      {
+        path: "standardComplaintDescriptionInfo", select:"description"
+      }
+    ]);
     res.json({
       issueType: updatedComplaint.issueType,
       complaintType: updatedComplaint.complaintType,
       descriptionCustom: updatedComplaint.descriptionCustom,
-      descriptionStandard: updatedComplaint.descriptionStandard
+      descriptionStandard: updatedComplaint.descriptionStandard,
+      standardComplaintDescriptionInfo: updatedComplaint.standardComplaintDescriptionInfo
     })
   }else {
     res.status(401)
