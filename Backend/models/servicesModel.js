@@ -11,9 +11,6 @@ const servicesSchema = mongoose.Schema({
     },
     description: {
         type: String
-    },
-    type: {
-        type: String
     }
 })
 
