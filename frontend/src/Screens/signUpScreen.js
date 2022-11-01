@@ -4,15 +4,20 @@ import {
   Button,
   Typography,
   TextField,
-  IconButton,InputAdornment
+  IconButton,
+  InputAdornment,
+  InputLabel,
+  OutlinedInput,
+  FormControl,
+  FormHelperText,
 } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
-//import logo192 from "./assets/istockphoto-687207094-612x612.jpg";
-//import UseMediaQuery from "./utils/useMediaQuery";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import logo192 from "../assets/complaintLogo.jpg";
+import UseMediaQuery from "../utils/useMediaQuery";
 //import Message from '../components/Message'
 
 const SignUpScreen = () => {
@@ -24,14 +29,22 @@ const SignUpScreen = () => {
     phoneNumber: "",
     address: "",
     confirmPassword: "",
-    showPassword: false
+    showPassword: false,
+    showConfirmPassword: false
   });
-  //const [width] = UseMediaQuery();
+  const [width] = UseMediaQuery();
 
   const handleClickShowPassword = () => {
     setInputs({
       ...inputs,
       showPassword: !inputs.showPassword,
+    });
+  };
+
+  const handleClickShowConfirmPassword = () => {
+    setInputs({
+      ...inputs,
+      showConfirmPassword: !inputs.showConfirmPassword,
     });
   };
 
@@ -82,79 +95,46 @@ const SignUpScreen = () => {
                 >
                   SIGN UP
                 </Typography>
-                <Grid
-                  container
-                  spacing={1}
-                  sx={{ marginTop: "1"}}
-                >
+                <Grid container spacing={1} sx={{ marginTop: "1%" }}>
                   <Grid item md={6}>
-                    <TextField
-                      onChange={handleChange}
-                      name="firstName"
-                      value={inputs.firstName}
-                      variant="outlined"
-                      type={"text"}
-                      required={true}
-                      placeholder="First Name"
-                      sx={{ width: 215}}
-                    />
+                    <FormControl sx={{ width: 210 }} variant="outlined">
+                                <InputLabel htmlFor="firstName">First Name</InputLabel>
+                                <OutlinedInput id="firstName" value={inputs.firstName} onChange={handleChange} inputProps={{'aria-label': 'firstName',}} label="firstName" name="firstName"/>
+                    </FormControl>
                   </Grid>
                   <Grid item md={6}>
-                    <TextField
-                      onChange={handleChange}
-                      name="lastName"
-                      value={inputs.lastName}
-                      required={true}
-                      variant="outlined"
-                      type={"text"}
-                      placeholder="Last Name"
-                      sx={{ width: 215}}
-                    />
+                  <FormControl sx={{ width: 210 }} variant="outlined">
+                                <InputLabel htmlFor="lastName">Last Name</InputLabel>
+                                <OutlinedInput id="lastName" value={inputs.lastName} onChange={handleChange} inputProps={{'aria-label': 'lastName',}} label="lastName" name="lastName"/>
+                    </FormControl>
                   </Grid>
                 </Grid>
-                <TextField
-                  onChange={handleChange}
-                  name="phoneNumber"
-                  value={inputs.phoneNumber}
-                  variant="outlined"
-                  type={"number"}
-                  placeholder="Phone Number"
-                  required={true}
-                  sx={{ width: 440, marginTop: 1}}
-                />
-                <TextField
-                  onChange={handleChange}
-                  name="address"
-                  value={inputs.address}
-                  variant="outlined"
-                  type={"text"}
-                  required={true}
-                  placeholder="Address"
-                  sx={{ width: 440, marginTop: 1}}
-                />
+                <FormControl sx={{ width: "99%", marginTop: "1%"}} variant="outlined">
+                                <InputLabel htmlFor="phoneNumber">Phone Number</InputLabel>
+                                <OutlinedInput id="phoneNumber" value={inputs.phoneNumber} onChange={handleChange} inputProps={{'aria-label': 'phoneNumber',}} label="phoneNumber" name="phoneNumber"/>
+                    </FormControl>
+                    <FormControl sx={{ width: "99%", marginTop: "1%"}} variant="outlined">
+                                <InputLabel htmlFor="address">Address</InputLabel>
+                                <OutlinedInput id="address" value={inputs.address} onChange={handleChange} inputProps={{'aria-label': 'address',}} label="address" name="address"/>
+                    </FormControl>
 
-                <TextField
-                  onChange={handleChange}
-                  name="email"
-                  value={inputs.email}
-                  marginTop="0px"
-                  variant="outlined"
-                  type={"email"}
-                  required={true}
-                  placeholder="Email"
-                  sx={{ width: 440, marginTop: 1}}
-                />
-                <Grid container spacing={1} sx={{ marginTop: 1}}>
+                    <FormControl sx={{ width: "99%", marginTop: "1%"}} variant="outlined">
+                                <InputLabel htmlFor="email">Email</InputLabel>
+                                <OutlinedInput id="email" value={inputs.email} onChange={handleChange} inputProps={{'aria-label': 'email',}} label="email" name="email"/>
+                    </FormControl>
+                <Grid container spacing={1} sx={{ marginTop: "1%" }}>
                   <Grid item md={6}>
-                      <TextField
+                    <FormControl sx={{ width: 215 }} variant="outlined">
+                      <InputLabel htmlFor="outlined-adornment-password">
+                        Password
+                      </InputLabel>
+                      <OutlinedInput
+                        id="outlined-adornment-password"
+                        type={inputs.showPassword ? "text" : "password"}
                         onChange={handleChange}
                         name="password"
                         value={inputs.password}
                         required={true}
-                        variant="outlined"
-                        type={inputs.showPassword ? 'text' : 'password'}
-                        placeholder="Password"
-                        sx={{ width: 215}}
                         endAdornment={
                           <InputAdornment position="end">
                             <IconButton
@@ -162,49 +142,53 @@ const SignUpScreen = () => {
                               onClick={handleClickShowPassword}
                               edge="end"
                             >
-                              {inputs.showPassword ? <VisibilityOff /> : <Visibility />}
+                              {inputs.showPassword ? (
+                                <VisibilityOff />
+                              ) : (
+                                <Visibility />
+                              )}
                             </IconButton>
                           </InputAdornment>
                         }
+                        label="Password"
                       />
+                    </FormControl>
                   </Grid>
                   <Grid item md={6}>
-                      <TextField
+                    <FormControl sx={{ width: 215 }} variant="outlined">
+                      <InputLabel htmlFor="outlined-adornment-Confirmpassword">
+                        Confirm Password
+                      </InputLabel>
+                      <OutlinedInput
+                        id="outlined-adornment-Confirmpassword"
+                        type={inputs.showConfirmPassword ? "text" : "password"}
                         onChange={handleChange}
                         name="confirmPassword"
                         value={inputs.confirmPassword}
                         required={true}
-                        variant="outlined"
-                        type={inputs.showPassword ? 'text' : 'password'}
-                        placeholder="Confirm Password"
-                        sx={{ width: 215}}
                         endAdornment={
                           <InputAdornment position="end">
                             <IconButton
                               aria-label="toggle password visibility"
-                              onClick={handleClickShowPassword}
+                              onClick={handleClickShowConfirmPassword}
                               edge="end"
                             >
-                              {inputs.showPassword ? <VisibilityOff /> : <Visibility />}
+                              {inputs.showPassword ? (
+                                <VisibilityOff />
+                              ) : (
+                                <Visibility />
+                              )}
                             </IconButton>
                           </InputAdornment>
                         }
+                        label="Password"
                       />
+                    </FormControl>
                   </Grid>
                 </Grid>
                 <Button
                   type="submit"
-                  sx={{
-                    margin: "2",
-                    backgroundColor: "#1b5e20",
-                    width: 300,
-                    padding: 1,
-                    color: "#e8eaf6",
-                    ":hover": {
-                      boxShadow: "5px 5px 10px #388e3c",
-                      backgroundColor: "#388e3c",
-                    },
-                  }}
+                  variant="contained" color="success" sx ={{width:"99%", marginTop: "2%"}}
                 >
                   SIGN UP
                 </Button>
@@ -214,11 +198,15 @@ const SignUpScreen = () => {
               </Box>
             </form>
           </Grid>
-          {/* {width > 1000 && (
-          <Grid Item md={6}>
-            <img src={logo192} style={{ width: "100%", height: "99.4vh" }} />
-          </Grid>
-        )} */}
+          {width > 1000 && (
+            <Grid item md={6}>
+              <img
+                src={logo192}
+                alt="logo"
+                style={{ width: "100%", height: "99.4vh" }}
+              />
+            </Grid>
+          )}
         </Grid>
       </div>
     </>

@@ -5,7 +5,7 @@ function App() {
   return (
     <Routes>
       <Route exact path="/login" element={<LoginScreen />} />
-      <Route exact path="/register" element={<SignUpScreen />} />
+      <Route exact path="/signup" element={<SignUpScreen />} />
     </Routes>
   );
 }
