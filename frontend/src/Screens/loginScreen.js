@@ -5,21 +5,21 @@ import {
   Button,
   Typography,
   TextField,
-  useScrollTrigger,
+  Paper,
+  Grid
 } from "@mui/material";
-import Paper from "@mui/material/Paper";
-import Grid from "@mui/material/Grid";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { shadows } from "@mui/system";
-import logo192 from "./assets/istockphoto-687207094-612x612.jpg";
-import UseMediaQuery from "./utils/useMediaQuery";
-const Login = () => {
+//import logo192 from "./assets/istockphoto-687207094-612x612.jpg";
+//import UseMediaQuery from "./utils/useMediaQuery";
+
+const LoginScreen = () => {
   const [inputs, setInputs] = useState({
     email: "",
     password: "",
   });
-  const [width] = UseMediaQuery();
+  //const [width] = UseMediaQuery();
   const handleChange = (e) => {
     setInputs((prevState) => ({
       ...prevState,
@@ -143,14 +143,14 @@ const Login = () => {
             </Box>
           </form>
         </Grid>
-        {width > 1000 && (
+        {/* {width > 1000 && (
           <Grid Item md={6}>
             <img src={logo192} style={{ width: "100%", height: "99.4vh" }} />
           </Grid>
-        )}
+        )} */}
       </Grid>
     </div>
   );
 };
 
-export default Login;
+export default LoginScreen;
