@@ -7,6 +7,7 @@ import userRoutes from './routes/userRoutes.js'
 import userRoleRoutes from './routes/userRoleRoutes.js'
 import complaintRoutes from './routes/complaintRoutes.js'
 import serviceRoutes from './routes/servicesRoutes.js'
+import announcementRoutes from './routes/announcementRoute.js'
 
 const app = express()
 
@@ -22,6 +23,7 @@ app.use('/api/users', userRoutes)
 app.use('/api/userRoles', userRoleRoutes)
 app.use('/api/complaints', complaintRoutes)
 app.use('/api/services',serviceRoutes)
+app.use('/api/announcements',announcementRoutes)
 
 app.use(notFound)
 app.use(errorHandler)
