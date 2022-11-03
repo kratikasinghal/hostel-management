@@ -27,6 +27,8 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Loader from '../components/Loader'
 import Message from '../components/Message'
 import { updateUserDetails,getUserDetails } from "../actions/userActions";
+import Announcement from "../components/Announcement";
+import { getAllAnnouncements } from "../actions/announcementActions";
 
 const ResidentScreen = () => {
 
@@ -52,6 +54,10 @@ const [lastName,setLastName] = useState("")
 
   const userDetails = useSelector(state => state.userDetails)
   const {user} = userDetails
+
+  const Announcements = useSelector(state => state.getAllAnnouncements)
+  const {announcements} = Announcements
+
   useEffect(()=>{
     if(!userInfo)
       navigate('/login')
@@ -66,6 +72,12 @@ const [lastName,setLastName] = useState("")
     }
   },[userInfo,navigate,user,dispatch])
   
+  useEffect(()=>{
+    if(!announcements){
+      dispatch(getAllAnnouncements())
+    }
+  },[announcements,dispatch])
+
   const handleSubmit = (e) => {
     e.preventDefault()
     if(password !== confirmPassword)
@@ -321,6 +333,23 @@ const [lastName,setLastName] = useState("")
           
             Show Previous complaints
               </Button>
+        </Grid>
+        <Divider orientation="vertical" flexItem={true}/>
+        <Grid item md={5}>
+        <Typography
+              variant="h5"
+              textAlign={"center"}
+              padding={1}
+              sx={{
+                color: "#283593",
+                fontFamily: "Arizonia",
+                marginBottom: 0,
+                marginTop: "1px",
+              }}
+            >
+              ANNOUNCEMENTS
+            </Typography>
+              {announcements && announcements.map(announcement => <Announcement date={announcement.date.split("T")[0]} key={announcement._id}>{announcement.description}</Announcement>)}
         </Grid>
         <Divider orientation="vertical" flexItem={true}/>
         {/* <Grid item xs sx={{ textAlign: "center" }}>
