@@ -5,20 +5,21 @@ import connectDB from './Config/db.js'
 import { notFound,errorHandler } from "./Middleware/errorHandler.js";
 import userRoutes from './routes/userRoutes.js'
 import userRoleRoutes from './routes/userRoleRoutes.js'
-
+import cors from 'cors'
 const app = express()
 
 dotenv.config()
 connectDB()
 
-app.get('/', (req,res) => {
-    res.send("API is running....")
-})
-
 app.use(express.json())
+app.use(cors())
+
 app.use('/api/users', userRoutes)
 app.use('/api/userRoles', userRoleRoutes)
 
+app.get('/', (req,res) => {
+    res.send("API is running....")
+})
 app.use(notFound)
 app.use(errorHandler)
 
