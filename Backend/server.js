@@ -9,22 +9,24 @@ import complaintRoutes from './routes/complaintRoutes.js'
 import serviceRoutes from './routes/servicesRoutes.js'
 import announcementRoutes from './routes/announcementRoute.js'
 
+import cors from 'cors'
 const app = express()
 
 dotenv.config()
 connectDB()
 
-app.get('/', (req,res) => {
-    res.send("API is running....")
-})
-
 app.use(express.json())
+app.use(cors())
+
 app.use('/api/users', userRoutes)
 app.use('/api/userRoles', userRoleRoutes)
 app.use('/api/complaints', complaintRoutes)
 app.use('/api/services',serviceRoutes)
 app.use('/api/announcements',announcementRoutes)
 
+app.get('/', (req,res) => {
+    res.send("API is running....")
+})
 app.use(notFound)
 app.use(errorHandler)
 
