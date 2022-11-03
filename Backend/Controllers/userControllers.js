@@ -77,7 +77,7 @@ const authUser = expressAsyncHandler(async (req, res) => {
 });
 
 //@desc get user Profile
-//@route /api/users/getProfile
+//@route /api/users/:id
 //@access PROTECTED
 const getProfile = expressAsyncHandler(async (req, res) => {
   const user = await User.findOne({
@@ -128,12 +128,10 @@ const updateProfile = expressAsyncHandler(async (req, res) => {
   const user = await User.findOne({ email: req.user.email });
 
   if (user) {
-    user.firstName = req.body.firstName || user.firstName;
-    user.lastName = req.body.lastName || user.lastName;
     user.address = req.body.address || user.address;
     user.phoneNumber = req.body.phoneNumber || user.phoneNumber;
     if (req.body.password) {
-      user.password = req.body.password;
+      user.password = await bcrypt.hash(req.body.password, 10);
     }
 
     const updatedUser = await user.save();
