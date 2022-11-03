@@ -1,24 +1,25 @@
-import React from "react";
+import React,{ useState, useEffect } from "react";
 import {
   Box,
   Button,
   Typography,
-  TextField,
   IconButton,
   InputAdornment,
   InputLabel,
   OutlinedInput,
   FormControl,
-  FormHelperText,
 } from "@mui/material";
 import Grid from "@mui/material/Grid";
-import { useState } from "react";
 import { Link } from "react-router-dom";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import logo192 from "../assets/complaintLogo.jpg";
 import UseMediaQuery from "../utils/useMediaQuery";
-//import Message from '../components/Message'
+import { useDispatch, useSelector } from "react-redux";
+import Message from "../components/Message";
+import Loader from "../components/Loader";
+import { useNavigate } from "react-router-dom";
+import {register} from "../actions/userActions.js";
 
 const SignUpScreen = () => {
   const [inputs, setInputs] = useState({
@@ -30,8 +31,25 @@ const SignUpScreen = () => {
     address: "",
     confirmPassword: "",
     showPassword: false,
-    showConfirmPassword: false
+    showConfirmPassword: false,
   });
+  const handleChange = e => {
+    setInputs(prevState => ({
+      ...prevState,
+      [e.target.name]: e.target.value,
+    }));
+  };
+  const [message, setMessage] = useState("");
+  const dispatch = useDispatch();
+  const userRegister = useSelector(state => state.userRegister);
+  const navigate = useNavigate();
+
+  const { loading, error, userInfo } = userRegister;
+
+  useEffect(() => {
+    if (userInfo) navigate("/resident/homePage");
+  }, [navigate, userInfo]);
+
   const [width] = UseMediaQuery();
 
   const handleClickShowPassword = () => {
@@ -48,19 +66,27 @@ const SignUpScreen = () => {
     });
   };
 
-  const handleChange = e => {
-    setInputs(prevState => ({
-      ...prevState,
-      [e.target.name]: e.target.value,
-    }));
-  };
   const handleSubmit = e => {
     e.preventDefault();
-
-    console.log(inputs);
+    if (inputs.password !== inputs.confirmPassword)
+      setMessage("Passwords Don't match");
+    else
+      dispatch(
+        register(
+          inputs.firstName,
+          inputs.lastName,
+          inputs.phoneNumber,
+          inputs.address,
+          inputs.email,
+          inputs.password
+        )
+      );
   };
+
   return (
     <>
+      {message && <Message severity="error" message={message} />}
+      {error && <Message severity="error" message={error} />}
       <div style={{ backgroundColor: "#d3ebd3", margin: 0, height: "100vh" }}>
         <Grid container>
           <Grid item md={6} xs={12}>
@@ -98,30 +124,74 @@ const SignUpScreen = () => {
                 <Grid container spacing={1} sx={{ marginTop: "1%" }}>
                   <Grid item md={6}>
                     <FormControl sx={{ width: 210 }} variant="outlined">
-                                <InputLabel htmlFor="firstName">First Name</InputLabel>
-                                <OutlinedInput id="firstName" value={inputs.firstName} onChange={handleChange} inputProps={{'aria-label': 'firstName',}} label="firstName" name="firstName"/>
+                      <InputLabel htmlFor="firstName">First Name</InputLabel>
+                      <OutlinedInput
+                        id="firstName"
+                        value={inputs.firstName}
+                        onChange={handleChange}
+                        inputProps={{ "aria-label": "firstName" }}
+                        label="firstName"
+                        name="firstName"
+                      />
                     </FormControl>
                   </Grid>
                   <Grid item md={6}>
-                  <FormControl sx={{ width: 210 }} variant="outlined">
-                                <InputLabel htmlFor="lastName">Last Name</InputLabel>
-                                <OutlinedInput id="lastName" value={inputs.lastName} onChange={handleChange} inputProps={{'aria-label': 'lastName',}} label="lastName" name="lastName"/>
+                    <FormControl sx={{ width: 210 }} variant="outlined">
+                      <InputLabel htmlFor="lastName">Last Name</InputLabel>
+                      <OutlinedInput
+                        id="lastName"
+                        value={inputs.lastName}
+                        onChange={handleChange}
+                        inputProps={{ "aria-label": "lastName" }}
+                        label="lastName"
+                        name="lastName"
+                      />
                     </FormControl>
                   </Grid>
                 </Grid>
-                <FormControl sx={{ width: "99%", marginTop: "1%"}} variant="outlined">
-                                <InputLabel htmlFor="phoneNumber">Phone Number</InputLabel>
-                                <OutlinedInput id="phoneNumber" value={inputs.phoneNumber} onChange={handleChange} inputProps={{'aria-label': 'phoneNumber',}} label="phoneNumber" name="phoneNumber"/>
-                    </FormControl>
-                    <FormControl sx={{ width: "99%", marginTop: "1%"}} variant="outlined">
-                                <InputLabel htmlFor="address">Address</InputLabel>
-                                <OutlinedInput id="address" value={inputs.address} onChange={handleChange} inputProps={{'aria-label': 'address',}} label="address" name="address"/>
-                    </FormControl>
+                <FormControl
+                  sx={{ width: "99%", marginTop: "1%" }}
+                  variant="outlined"
+                >
+                  <InputLabel htmlFor="phoneNumber">Phone Number</InputLabel>
+                  <OutlinedInput
+                    id="phoneNumber"
+                    value={inputs.phoneNumber}
+                    onChange={handleChange}
+                    inputProps={{ "aria-label": "phoneNumber" }}
+                    label="phoneNumber"
+                    name="phoneNumber"
+                  />
+                </FormControl>
+                <FormControl
+                  sx={{ width: "99%", marginTop: "1%" }}
+                  variant="outlined"
+                >
+                  <InputLabel htmlFor="address">Address</InputLabel>
+                  <OutlinedInput
+                    id="address"
+                    value={inputs.address}
+                    onChange={handleChange}
+                    inputProps={{ "aria-label": "address" }}
+                    label="address"
+                    name="address"
+                  />
+                </FormControl>
 
-                    <FormControl sx={{ width: "99%", marginTop: "1%"}} variant="outlined">
-                                <InputLabel htmlFor="email">Email</InputLabel>
-                                <OutlinedInput id="email" value={inputs.email} onChange={handleChange} inputProps={{'aria-label': 'email',}} label="email" name="email"/>
-                    </FormControl>
+                <FormControl
+                  sx={{ width: "99%", marginTop: "1%" }}
+                  variant="outlined"
+                >
+                  <InputLabel htmlFor="email">Email</InputLabel>
+                  <OutlinedInput
+                    id="email"
+                    value={inputs.email}
+                    onChange={handleChange}
+                    inputProps={{ "aria-label": "email" }}
+                    label="email"
+                    name="email"
+                  />
+                </FormControl>
                 <Grid container spacing={1} sx={{ marginTop: "1%" }}>
                   <Grid item md={6}>
                     <FormControl sx={{ width: 215 }} variant="outlined">
@@ -173,7 +243,7 @@ const SignUpScreen = () => {
                               onClick={handleClickShowConfirmPassword}
                               edge="end"
                             >
-                              {inputs.showPassword ? (
+                              {inputs.showConfirmPassword ? (
                                 <VisibilityOff />
                               ) : (
                                 <Visibility />
@@ -181,16 +251,18 @@ const SignUpScreen = () => {
                             </IconButton>
                           </InputAdornment>
                         }
-                        label="Password"
+                        label="confirmPassword"
                       />
                     </FormControl>
                   </Grid>
                 </Grid>
                 <Button
                   type="submit"
-                  variant="contained" color="success" sx ={{width:"99%", marginTop: "2%"}}
+                  variant="contained"
+                  color="success"
+                  sx={{ width: "99%", marginTop: "2%" }}
                 >
-                  SIGN UP
+                  {loading && <Loader />}SIGN UP
                 </Button>
                 <p className="text-center" color="success">
                   <Link to="/login">Already have an account? Login</Link>

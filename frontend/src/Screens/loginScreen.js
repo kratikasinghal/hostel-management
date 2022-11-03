@@ -1,42 +1,66 @@
 import React from "react";
-import { styled } from "@mui/material/styles";
 import {
   Box,
   Button,
+  Grid,
   Typography,
-  TextField,
-  Paper,
-  Grid
+  FormControl,
+  InputLabel,
+  OutlinedInput,
+  InputAdornment,
+  IconButton
 } from "@mui/material";
-import { useState } from "react";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import { useState,useEffect } from "react";
 import { Link } from "react-router-dom";
-import { shadows } from "@mui/system";
-//import logo192 from "./assets/istockphoto-687207094-612x612.jpg";
-//import UseMediaQuery from "./utils/useMediaQuery";
+import logo192 from "../assets/complaintLogo.jpg";
+import UseMediaQuery from "../utils/useMediaQuery";
+import {login} from '../actions/userActions'
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import Message from "../components/Message";
+import Loader from "../components/Loader";
 
 const LoginScreen = () => {
   const [inputs, setInputs] = useState({
     email: "",
     password: "",
+    showPassword: ""
   });
-  //const [width] = UseMediaQuery();
-  const handleChange = (e) => {
-    setInputs((prevState) => ({
+  const [width] = UseMediaQuery();
+  const handleChange = e => {
+    setInputs(prevState => ({
       ...prevState,
       [e.target.name]: e.target.value,
     }));
   };
-  const handleSubmit = (e) => {
+
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+  const {loading,userInfo,error} = useSelector(state => state.userLogin)
+
+  useEffect(() => {
+    if (userInfo) navigate("/resident/homePage");
+  }, [navigate, userInfo]);
+
+  const handleSubmit = e => {
     e.preventDefault();
-    console.log(inputs);
+    dispatch(
+      login(inputs.email,inputs.password)
+    )
   };
-  const Item = styled(Paper)(() => ({
-    textAlign: "center",
-  }));
+  const handleClickShowPassword = () => {
+    setInputs({
+      ...inputs,
+      showPassword: !inputs.showPassword,
+    });
+  };
   return (
     <div style={{ backgroundColor: "#d3ebd3", margin: 0, height: "100vh" }}>
+      {error && <Message severity="error" message={error} />}
       <Grid container>
-        <Grid Item md={6} xs={12}>
+        <Grid item md={6} xs={12}>
           <form onSubmit={handleSubmit}>
             <Box
               display="flex"
@@ -45,8 +69,8 @@ const LoginScreen = () => {
               alignItems="center"
               justifyContent={"center"}
               margin="auto"
-              marginTop={10}
-              padding={10}
+              marginTop={"16%"}
+              padding={5}
               borderRadius={5}
               style={{ backgroundColor: "white" }}
               boxShadow={"5px 5px 10px #ccc"}
@@ -57,7 +81,7 @@ const LoginScreen = () => {
               }}
             >
               <Typography
-                variant="h3"
+                variant="h4"
                 textAlign={"center"}
                 padding={2}
                 sx={{
@@ -69,43 +93,56 @@ const LoginScreen = () => {
               >
                 Welcome Back
               </Typography>
-              <Typography
-                variant="h6"
-                textAlign={"center"}
-                sx={{ color: "#283593", fontFamily: "Arizonia", marginTop: 0 }}
+              <FormControl
+                sx={{ width: "99%", marginTop: "1%" }}
+                variant="outlined"
               >
-                Please enter your details{" "}
-              </Typography>
+                <InputLabel htmlFor="email">Email</InputLabel>
+                <OutlinedInput
+                  id="email"
+                  value={inputs.email}
+                  onChange={handleChange}
+                  inputProps={{ "aria-label": "email" }}
+                  label="email"
+                  name="email"
+                />
+              </FormControl>
 
-              <TextField
-                onChange={handleChange}
-                name="email"
-                value={inputs.email}
-                required={true}
-                variant="outlined"
-                type={"email"}
-                placeholder="Email"
-                margin="normal"
-                sx={{ width: 300 }}
-              />
-
-              <TextField
-                onChange={handleChange}
-                name="password"
-                value={inputs.password}
-                required={true}
-                variant="outlined"
-                type={"password"}
-                placeholder="Password"
-                sx={{ width: 300, height: 100 }}
-              />
-
+              <FormControl sx={{ width: "99%",marginTop:"2%" }} variant="outlined">
+                      <InputLabel htmlFor="outlined-adornment-password">
+                        Password
+                      </InputLabel>
+                      <OutlinedInput
+                        id="outlined-adornment-password"
+                        type={inputs.showPassword ? "text" : "password"}
+                        onChange={handleChange}
+                        name="password"
+                        value={inputs.password}
+                        required={true}
+                        endAdornment={
+                          <InputAdornment position="end">
+                            <IconButton
+                              aria-label="toggle password visibility"
+                              onClick={handleClickShowPassword}
+                              edge="end"
+                            >
+                              {inputs.showPassword ? (
+                                <VisibilityOff />
+                              ) : (
+                                <Visibility />
+                              )}
+                            </IconButton>
+                          </InputAdornment>
+                        }
+                        label="Password"
+                      />
+                    </FormControl>
               <Button
                 type="submit"
                 sx={{
-                  margin: "5px",
+                  marginTop: "3%",
                   backgroundColor: "#1b5e20",
-                  width: 300,
+                  width: "97%",
                   padding: 1,
                   color: "#e8eaf6",
                   ":hover": {
@@ -114,7 +151,7 @@ const LoginScreen = () => {
                   },
                 }}
               >
-                Login
+                {loading && <Loader />}Login
               </Button>
               <Grid
                 container
@@ -137,17 +174,21 @@ const LoginScreen = () => {
 
               <p className="text-left">
                 <Link to="/signup">
-                  Don't have an account? <b>Signup</b>
+                  Don't have an account? <b>SIGNUP</b>
                 </Link>
               </p>
             </Box>
           </form>
         </Grid>
-        {/* {width > 1000 && (
-          <Grid Item md={6}>
-            <img src={logo192} style={{ width: "100%", height: "99.4vh" }} />
+        {width > 1000 && (
+          <Grid item md={6}>
+            <img
+              src={logo192}
+              alt="logo"
+              style={{ width: "100%", height: "99.4vh" }}
+            />
           </Grid>
-        )} */}
+        )}
       </Grid>
     </div>
   );
