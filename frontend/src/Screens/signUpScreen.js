@@ -85,8 +85,8 @@ const SignUpScreen = () => {
 
   return (
     <>
-      {message && <Message severity="error" message={message} />}
-      {error && <Message severity="error" message={error} />}
+      {message && <Message severity="error" message={message} open={true}/>}
+      {error && <Message severity="error" message={error} open={true}/>}
       <div style={{ backgroundColor: "#d3ebd3", margin: 0, height: "100vh" }}>
         <Grid container>
           <Grid item md={6} xs={12}>

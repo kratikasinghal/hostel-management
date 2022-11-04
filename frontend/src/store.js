@@ -3,6 +3,7 @@ import { configureStore } from '@reduxjs/toolkit'
 import { userRegisterReducer,userLoginReducer,updateUserProfileReducer,userDetailsReducer } from "./reducers/userReducers"
 import { getAllAnnouncementsReducer } from "./reducers/AnnouncementReducers"
 import { getRolesReducer } from "./reducers/userRoleReducer"
+import { getAllServicesReducer } from "./reducers/servicesReducers"
 
 const reducer =  {
     userRegister: userRegisterReducer,
@@ -10,7 +11,8 @@ const reducer =  {
     updateUserProfile: updateUserProfileReducer,
     userDetails: userDetailsReducer,
     getAllAnnouncements: getAllAnnouncementsReducer,
-    getRoles: getRolesReducer
+    getRoles: getRolesReducer,
+    getAllServices: getAllServicesReducer
 }
 
 const userInfoFromStorage = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : null

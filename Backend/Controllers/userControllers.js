@@ -32,6 +32,7 @@ const registerUser = expressAsyncHandler(async (req, res) => {
 
     if (user) {
       res.status(201).json({
+        id: user._id,
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,

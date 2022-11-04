@@ -5,6 +5,6 @@ const router = express.Router()
 
 router.post('/create',protect,admin,createService)
 router.delete('/:slug',protect,admin,deleteService)
-router.get('/getAll',protect,admin,getServices)
+router.get('/getAll',protect,getServices)
 
 export default router
