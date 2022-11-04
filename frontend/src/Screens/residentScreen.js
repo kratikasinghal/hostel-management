@@ -29,6 +29,8 @@ import Message from '../components/Message'
 import { updateUserDetails,getUserDetails } from "../actions/userActions";
 import Announcement from "../components/Announcement";
 import { getAllAnnouncements } from "../actions/announcementActions";
+import DynamicFeedIcon from '@mui/icons-material/DynamicFeed';
+import RegisterComplaint from "../components/RegisterComplaint";
 
 const ResidentScreen = () => {
 
@@ -352,53 +354,22 @@ const [lastName,setLastName] = useState("")
               {announcements && announcements.map(announcement => <Announcement date={announcement.date.split("T")[0]} key={announcement._id}>{announcement.description}</Announcement>)}
         </Grid>
         <Divider orientation="vertical" flexItem={true}/>
-        {/* <Grid item xs sx={{ textAlign: "center" }}>
-        
-          <div>
-            <h1>Announcements</h1>
-            <Card sx={{ minWidth: 275  ,marginTop:"50px"}}>
-      <CardContent>
-        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-          Announcement 1
-                </Typography>
-                <Typography color="black" sx={{ position:"bottom",bottom:"0px", right: "0px", textAlign:"right" }}>
-   Date1
-  </Typography>  
-      </CardContent>
-            </Card>
-            <Card sx={{ minWidth: 275  ,marginTop:"20px"}}>
-      <CardContent>
-        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-          Announcement 2
-                </Typography>
-                <Typography color="black" sx={{ position:"bottom",bottom:"0px", right: "0px", textAlign:"right" }}>
-   Date2
-  </Typography>  
-      </CardContent>
-            </Card>
-            <Card sx={{ minWidth: 275  ,marginTop:"20px"}}>
-      <CardContent>
-        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                  Announcement 3
-                </Typography>
-                  <Typography color="black" sx={{ position:"bottom",bottom:"0px", right: "0px", textAlign:"right" }}>
-   Date3
-  </Typography>  
-      </CardContent>
-            </Card>
-            <Card sx={{ minWidth: 275  ,marginTop:"20px"}}>
-      <CardContent>
-        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-          Announcement 4
-                </Typography>
-                <Typography color="black" sx={{ position:"bottom",bottom:"0px", right: "0px", textAlign:"right" }}>
-   Date4
-  </Typography>  
-      </CardContent>
-    </Card>
-          </div>
+        <Grid item md={3} sx={{margin:"2%" }}>
+          <DynamicFeedIcon sx={{margin:"0 45%"}} fontSize="large"/>
+        <Typography
+              variant="h5"
+              textAlign={"center"}
+              padding={1}
+              sx={{
+                color: "#283593",
+                fontFamily: "Arizonia",
+              }}
+            >
+              REGISTER A COMPLAINT
+            </Typography>
+            <RegisterComplaint />
         </Grid>
-
+        {/* 
         <Grid item xs sx={{ textAlign: "left" }}>
           <div>
             <h1>Complaints</h1>

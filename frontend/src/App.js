@@ -10,7 +10,6 @@ const App = () => {
       <Route exact path="/login" element={<LoginScreen />} />
       <Route exact path="/signup" element={<SignUpScreen />} />
       <Route exact path="/resident/homePage" element={<ResidentScreen />} />
-      <Route exact path="/" element={<Announcement />} />
     </Routes>
     </BrowserRouter>
   );
