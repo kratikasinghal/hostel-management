@@ -1,32 +1,19 @@
 import React from "react";
-import { styled } from "@mui/material/styles";
 import {
-  Box,
   Button,
-  Typography,
-  TextField,InputLabel,OutlinedInput,InputAdornment,IconButton,Divider
+  Typography, InputLabel, OutlinedInput, InputAdornment, IconButton, Divider
 } from "@mui/material";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import { Link } from "react-router-dom";
-import Radio from '@mui/material/Radio';
-import Checkbox from '@mui/material/Checkbox';
-import RadioGroup from '@mui/material/RadioGroup';
-import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
-import FormLabel from '@mui/material/FormLabel';
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Loader from '../components/Loader'
 import Message from '../components/Message'
-import { updateUserDetails,getUserDetails } from "../actions/userActions";
+import { updateUserDetails, getUserDetails } from "../actions/userActions";
 import Announcement from "../components/Announcement";
 import { getAllAnnouncements } from "../actions/announcementActions";
 import DynamicFeedIcon from '@mui/icons-material/DynamicFeed';
@@ -34,121 +21,61 @@ import RegisterComplaint from "../components/RegisterComplaint";
 
 const ResidentScreen = () => {
 
-  const [firstName,setFirstName] = useState("")
-const [lastName,setLastName] = useState("")
-  const [phoneNumber,setPhoneNumber] = useState("")
-  const [address,setAddress] = useState("")
-  const [email,setEmail] = useState("")
-  const [password,setPassword] = useState("")
-  const [confirmPassword,setConfirmPassword] = useState("")
-  const [showPassword,setShowPassword] = useState("")
-  const [showConfirmPassword,setShowConfirmPassword] = useState("")
-  const [message,setMessage] = useState("")
+  const [firstName, setFirstName] = useState("")
+  const [lastName, setLastName] = useState("")
+  const [phoneNumber, setPhoneNumber] = useState("")
+  const [address, setAddress] = useState("")
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [confirmPassword, setConfirmPassword] = useState("")
+  const [showPassword, setShowPassword] = useState("")
+  const [showConfirmPassword, setShowConfirmPassword] = useState("")
+  const [message, setMessage] = useState("")
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
   const userLogin = useSelector(state => state.userLogin)
-  const {userInfo} = userLogin
+  const { userInfo } = userLogin
 
   const updateUserProfile = useSelector(state => state.updateUserProfile)
-  const { loading,success } = updateUserProfile
+  const { loading, success } = updateUserProfile
 
   const userDetails = useSelector(state => state.userDetails)
-  const {user} = userDetails
+  const { user } = userDetails
 
   const Announcements = useSelector(state => state.getAllAnnouncements)
-  const {announcements} = Announcements
+  const { announcements } = Announcements
 
-  useEffect(()=>{
-    if(!userInfo)
+  useEffect(() => {
+    if (!userInfo)
       navigate('/login')
-    else if(!user.email){
+    else if (!user.email) {
       dispatch(getUserDetails())
-    }else{
+    } else {
       setFirstName(user.firstName)
       setLastName(user.lastName)
       setPhoneNumber(user.phoneNumber)
       setAddress(user.address)
       setEmail(user.email)
     }
-  },[userInfo,navigate,user,dispatch])
-  
-  useEffect(()=>{
-    if(!announcements){
+  }, [userInfo, navigate, user, dispatch])
+
+  useEffect(() => {
+    if (!announcements) {
       dispatch(getAllAnnouncements())
     }
-  },[announcements,dispatch])
+  }, [announcements, dispatch])
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    if(password !== confirmPassword)
+    if (password !== confirmPassword)
       setMessage("Passwords don't Match!!")
-    else{
-      dispatch(updateUserDetails({phoneNumber,address,password}))
-    }
-  };
-  
-
-  const [value, setValue] = useState('')
-
-   const handle = (event) => {
-     setValue(event.target.value);
-  };
-  const [visibleE, setVisibleE] = useState(false);
-  const [checkE, setCheckE] = useState([]);
-
-  const handleCheckE = (e) => {
-    const value = e.target.value;
-    const checked = e.target.checked;
-  //  setCheck(event.target.checked);
-    console.log(value, checked);
-    if (checked) {
-      setCheckE([
-        ...checkE,value
-      ])
-    }
     else {
-      setCheckE(checkE.filter( (e) =>console.log('e=>'+e,'Value =>'+value)));
+      dispatch(updateUserDetails({ phoneNumber, address, password }))
     }
   };
-  const [visibleC, setVisibleC] = useState(false);
-  const [checkC, setCheckC] = useState([]);
 
-  const handleCheckC = (e) => {
-    const value = e.target.value;
-    const checked = e.target.checked;
-  //  setCheck(event.target.checked);
-    console.log(value, checked);
-    if (checked) {
-      setCheckC([
-        ...checkC,value
-      ])
-    }
-    else {
-      setCheckC(checkC.filter( (e) =>console.log('e=>'+e,'Value =>'+value)));
-    }
-  };
-  const [visibleP, setVisibleP] = useState(false);
-  const [checkP, setCheckP] = useState([]);
-
-  const handleCheckP = (e) => {
-    const value = e.target.value;
-    const checked = e.target.checked;
-  //  setCheck(event.target.checked);
-    console.log(value, checked);
-    if (checked) {
-      setCheckP([
-        ...checkP,value
-      ])
-    }
-    else {
-      setCheckP(checkP.filter( (e) =>console.log('e=>'+e,'Value =>'+value)));
-    }
-  };
-  const [ visibleo, setVisibleO ] = useState(false);
-  const [ otherInfo, setOtherInfo ] = useState('');
-  
   const handleClickShowPassword = () => {
     setShowPassword(prevShowPassword => !prevShowPassword)
   };
@@ -159,12 +86,12 @@ const [lastName,setLastName] = useState("")
 
   return (
     <div>
-      {message && <Message severity="error" message={message} open={true}/>}
-      {success && <Message severity="success" message="Profile Updated" open = {true}/>}
+      {message && <Message severity="error" message={message} open={true} />}
+      {success && <Message severity="success" message="Profile Updated" open={true} />}
       <Grid container direction="row" spacing={2}>
-        <Grid item xs md={3} sx={{ textAlign: "center",margin:"2%" }}>
+        <Grid item xs md={3} sx={{ textAlign: "center", margin: "2%" }}>
           <div>
-            <AccountCircleIcon fontSize="large"/>
+            <AccountCircleIcon fontSize="large" />
           </div>
           <form onSubmit={handleSubmit}>
             <Typography
@@ -181,248 +108,194 @@ const [lastName,setLastName] = useState("")
               PROFILE
             </Typography>
 
-            <Grid container spacing={.5} style={{ marginTop: "5px"}}>
-            <Grid item md={6}>
-                    <FormControl variant="outlined">
-                      <InputLabel htmlFor="firstName">First Name</InputLabel>
-                      <OutlinedInput
-                        id="firstName"
-                        value={firstName}
-                        disabled
-                        inputProps={{ "aria-label": "firstName" }}
-                        label="firstName"
-                        name="firstName"
-                      />
-                    </FormControl>
-                  </Grid>
-                  <Grid item md={6}>
-                    <FormControl variant="outlined">
-                      <InputLabel htmlFor="lastName">Last Name</InputLabel>
-                      <OutlinedInput
-                        id="lastName"
-                        value={lastName}
-                        disabled
-                        inputProps={{ "aria-label": "lastName" }}
-                        label="lastName"
-                        name="lastName"
-                      />
-                    </FormControl>
-                  </Grid>
-           
-                  <FormControl
-                  sx={{ width: "100%", marginTop: "3%" }}
-                  variant="outlined"
-                >
-                  <InputLabel htmlFor="phoneNumber">Phone Number</InputLabel>
+            <Grid container spacing={.5} style={{ marginTop: "5px" }}>
+              <Grid item md={6}>
+                <FormControl variant="outlined">
+                  <InputLabel htmlFor="firstName">First Name</InputLabel>
                   <OutlinedInput
-                    id="phoneNumber"
-                    value={phoneNumber}
-                    onChange={(e) => setPhoneNumber(e.target.value)}
-                    inputProps={{ "aria-label": "phoneNumber" }}
-                    label="phoneNumber"
-                    name="phoneNumber"
+                    id="firstName"
+                    value={firstName}
+                    disabled
+                    inputProps={{ "aria-label": "firstName" }}
+                    label="firstName"
+                    name="firstName"
                   />
                 </FormControl>
-                <FormControl
-                  sx={{ width: "100%", marginTop: "3%" }}
-                  variant="outlined"
-                >
-                  <InputLabel htmlFor="address">Address</InputLabel>
+              </Grid>
+              <Grid item md={6}>
+                <FormControl variant="outlined">
+                  <InputLabel htmlFor="lastName">Last Name</InputLabel>
                   <OutlinedInput
-                    id="address"
-                    value={address}
-                    onChange={(e) => setAddress(e.target.value)}
-                    inputProps={{ "aria-label": "address" }}
-                    label="address"
-                    name="address"
+                    id="lastName"
+                    value={lastName}
+                    disabled
+                    inputProps={{ "aria-label": "lastName" }}
+                    label="lastName"
+                    name="lastName"
                   />
                 </FormControl>
-                <FormControl variant="outlined" sx={{ width: "100%", marginTop: "3%" }}>
-                      <InputLabel htmlFor="email">Email</InputLabel>
-                      <OutlinedInput
-                        id="email"
-                        value={email}
-                        disabled
-                        inputProps={{ "aria-label": "email" }}
-                        label="email"
-                        name="email"
-                      />
-                    </FormControl>
-                    <Grid container spacing={1} sx={{ marginTop: "1%" }}>
-                  <Grid item md={6}>
-                    <FormControl variant="outlined">
-                      <InputLabel htmlFor="outlined-adornment-password">
-                        Password
-                      </InputLabel>
-                      <OutlinedInput
-                        id="outlined-adornment-password"
-                        type={showPassword ? "text" : "password"}
-                        onChange={(e) => setPassword(e.target.value)}
-                        name="password"
-                        value={password}
-                        required={true}
-                        endAdornment={
-                          <InputAdornment position="end">
-                            <IconButton
-                              aria-label="toggle password visibility"
-                              onClick={handleClickShowPassword}
-                              edge="end"
-                            >
-                              {showPassword ? (
-                                <VisibilityOff />
-                              ) : (
-                                <Visibility />
-                              )}
-                            </IconButton>
-                          </InputAdornment>
-                        }
-                        label="Password"
-                      />
-                    </FormControl>
-                  </Grid>
-                  <Grid item md={6}>
-                    <FormControl variant="outlined">
-                      <InputLabel htmlFor="outlined-adornment-Confirmpassword">
-                        Cnfm Password
-                      </InputLabel>
-                      <OutlinedInput
-                        id="outlined-adornment-Confirmpassword"
-                        type={showConfirmPassword ? "text" : "password"}
-                        onChange={e=>setConfirmPassword(e.target.value)}
-                        name="confirmPassword"
-                        value={confirmPassword}
-                        required={true}
-                        endAdornment={
-                          <InputAdornment position="end">
-                            <IconButton
-                              aria-label="toggle password visibility"
-                              onClick={handleClickShowConfirmPassword}
-                              edge="end"
-                            >
-                              {showConfirmPassword ? (
-                                <VisibilityOff />
-                              ) : (
-                                <Visibility />
-                              )}
-                            </IconButton>
-                          </InputAdornment>
-                        }
-                        label="confirmPassword"
-                      />
-                    </FormControl>
-                  </Grid>
+              </Grid>
+
+              <FormControl
+                sx={{ width: "100%", marginTop: "3%" }}
+                variant="outlined"
+              >
+                <InputLabel htmlFor="phoneNumber">Phone Number</InputLabel>
+                <OutlinedInput
+                  id="phoneNumber"
+                  value={phoneNumber}
+                  onChange={(e) => setPhoneNumber(e.target.value)}
+                  inputProps={{ "aria-label": "phoneNumber" }}
+                  label="phoneNumber"
+                  name="phoneNumber"
+                />
+              </FormControl>
+              <FormControl
+                sx={{ width: "100%", marginTop: "3%" }}
+                variant="outlined"
+              >
+                <InputLabel htmlFor="address">Address</InputLabel>
+                <OutlinedInput
+                  id="address"
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
+                  inputProps={{ "aria-label": "address" }}
+                  label="address"
+                  name="address"
+                />
+              </FormControl>
+              <FormControl variant="outlined" sx={{ width: "100%", marginTop: "3%" }}>
+                <InputLabel htmlFor="email">Email</InputLabel>
+                <OutlinedInput
+                  id="email"
+                  value={email}
+                  disabled
+                  inputProps={{ "aria-label": "email" }}
+                  label="email"
+                  name="email"
+                />
+              </FormControl>
+              <Grid container spacing={1} sx={{ marginTop: "1%" }}>
+                <Grid item md={6}>
+                  <FormControl variant="outlined">
+                    <InputLabel htmlFor="outlined-adornment-password">
+                      Password
+                    </InputLabel>
+                    <OutlinedInput
+                      id="outlined-adornment-password"
+                      type={showPassword ? "text" : "password"}
+                      onChange={(e) => setPassword(e.target.value)}
+                      name="password"
+                      value={password}
+                      required={true}
+                      endAdornment={
+                        <InputAdornment position="end">
+                          <IconButton
+                            aria-label="toggle password visibility"
+                            onClick={handleClickShowPassword}
+                            edge="end"
+                          >
+                            {showPassword ? (
+                              <VisibilityOff />
+                            ) : (
+                              <Visibility />
+                            )}
+                          </IconButton>
+                        </InputAdornment>
+                      }
+                      label="Password"
+                    />
+                  </FormControl>
                 </Grid>
-            <Button
-              type="submit"
-              variant="contained" color="success"
-              sx={{
-                margin: "5%",
-                width: "100%",
-              }}
-            >
-              {loading && <Loader />}Update Information
+                <Grid item md={6}>
+                  <FormControl variant="outlined">
+                    <InputLabel htmlFor="outlined-adornment-Confirmpassword">
+                      Cnfm Password
+                    </InputLabel>
+                    <OutlinedInput
+                      id="outlined-adornment-Confirmpassword"
+                      type={showConfirmPassword ? "text" : "password"}
+                      onChange={e => setConfirmPassword(e.target.value)}
+                      name="confirmPassword"
+                      value={confirmPassword}
+                      required={true}
+                      endAdornment={
+                        <InputAdornment position="end">
+                          <IconButton
+                            aria-label="toggle password visibility"
+                            onClick={handleClickShowConfirmPassword}
+                            edge="end"
+                          >
+                            {showConfirmPassword ? (
+                              <VisibilityOff />
+                            ) : (
+                              <Visibility />
+                            )}
+                          </IconButton>
+                        </InputAdornment>
+                      }
+                      label="confirmPassword"
+                    />
+                  </FormControl>
+                </Grid>
+              </Grid>
+              <Button
+                type="submit"
+                variant="contained" color="success"
+                sx={{
+                  margin: "5%",
+                  width: "100%",
+                }}
+              >
+                {loading && <Loader />}Update Information
               </Button>
             </Grid>
           </form>
           <Button
-              type="submit"
-              variant="outlined" color="success"
-              sx={{
-                marginTop: "5%",
-                width: "90%",
-                padding: 1,
-              }}>
-          
+            type="submit"
+            variant="outlined" color="success"
+            sx={{
+              marginTop: "5%",
+              width: "90%",
+              padding: 1,
+            }}>
+
             Show Previous complaints
-              </Button>
+          </Button>
         </Grid>
-        <Divider orientation="vertical" flexItem={true}/>
+        <Divider orientation="vertical" flexItem={true} />
         <Grid item md={5}>
-        <Typography
-              variant="h5"
-              textAlign={"center"}
-              padding={1}
-              sx={{
-                color: "#283593",
-                fontFamily: "Arizonia",
-                marginBottom: 0,
-                marginTop: "1px",
-              }}
-            >
-              ANNOUNCEMENTS
-            </Typography>
-              {announcements && announcements.map(announcement => <Announcement date={announcement.date.split("T")[0]} key={announcement._id}>{announcement.description}</Announcement>)}
+          <Typography
+            variant="h5"
+            textAlign={"center"}
+            padding={1}
+            sx={{
+              color: "#283593",
+              fontFamily: "Arizonia",
+              marginBottom: 0,
+              marginTop: "1px",
+            }}
+          >
+            ANNOUNCEMENTS
+          </Typography>
+          {announcements && announcements.map(announcement => <Announcement date={announcement.date.split("T")[0]} key={announcement._id}>{announcement.description}</Announcement>)}
         </Grid>
-        <Divider orientation="vertical" flexItem={true}/>
-        <Grid item md={3} sx={{margin:"2%" }}>
-          <DynamicFeedIcon sx={{margin:"0 45%"}} fontSize="large"/>
-        <Typography
-              variant="h5"
-              textAlign={"center"}
-              padding={1}
-              sx={{
-                color: "#283593",
-                fontFamily: "Arizonia",
-              }}
-            >
-              REGISTER A COMPLAINT
-            </Typography>
-            <RegisterComplaint />
+        <Divider orientation="vertical" flexItem={true} />
+        <Grid item md={3} sx={{ margin: "2%" }}>
+          <DynamicFeedIcon sx={{ margin: "0 45%" }} fontSize="large" />
+          <Typography
+            variant="h5"
+            textAlign={"center"}
+            padding={1}
+            sx={{
+              color: "#283593",
+              fontFamily: "Arizonia",
+            }}
+          >
+            REGISTER A COMPLAINT
+          </Typography>
+          <RegisterComplaint />
         </Grid>
-        {/* 
-        <Grid item xs sx={{ textAlign: "left" }}>
-          <div>
-            <h1>Complaints</h1>
-            <h2 style={{ marginTop: "100px" }}>Do you want to register a complaint?</h2>
-            <FormControl>
-      <FormLabel id="demo-controlled-radio-buttons-group">Choose the service</FormLabel>
-            <RadioGroup
-        aria-labelledby="demo-controlled-radio-buttons-group"
-        name="controlled-radio-buttons-group"
-        value={value}
-        onChange={handle}
-      >
-                <FormControlLabel value="electrician" control={<Radio />} label="Electrician" onClick={() => setVisibleE(true)} />
-                {visibleE &&
-                  <div>
-                    <FormGroup>
-                      <FormControlLabel control={<Checkbox onChange={handleCheckE} value="plug complaint"/>} label="Plugs not working" />
-                      <FormControlLabel control={<Checkbox onChange={handleCheckE} value="fan complaint" />} label="Fan not working" />
-                      <FormControlLabel control={<Checkbox onChange={handleCheckE} value="light complaint" />} label="Lights not working" /> 
-                      <TextField id="outlined-basic" label="Custom Electrician Complaint " variant="outlined" />
-                    </FormGroup>
-                  </div>}
-                <FormControlLabel value="carpenter" control={<Radio />} label="Carpenter" onClick={() => setVisibleC(true)} />
-                {visibleC &&
-                  <div>
-                    <FormGroup>
-                      <FormControlLabel control={<Checkbox onChange={handleCheckC} value="Almirah complaint"/>} label="Almirah" />
-                      <FormControlLabel control={<Checkbox onChange={handleCheckC} value="Door complaint" />} label="Door" />
-                      <FormControlLabel control={<Checkbox onChange={handleCheckC} value="Bed complaint" />} label="Bed" /> 
-                      <TextField id="outlined-basic" label="Custom Carpenter Complaint " variant="outlined" />
-                    </FormGroup>
-                  </div>}
-                <FormControlLabel value="Plumber" control={<Radio />} label="Plumber" onClick={() => setVisibleP(true)} />
-                {visibleP &&
-                  <div>
-                    <FormGroup>
-                      <FormControlLabel control={<Checkbox onChange={handleCheckP} value="Bathroom complaint"/>} label="Bathroom" />
-                      <FormControlLabel control={<Checkbox onChange={handleCheckP} value="Kitchen complaint" />} label="Kitchen" />
-                      <FormControlLabel control={<Checkbox onChange={handleCheckP} value="Laundry complaint" />} label="Laundry" /> 
-                      <TextField id="outlined-basic" label="Custom Plumber Complaint " variant="outlined" />
-                    </FormGroup>
-                  </div>}
-                <FormControlLabel value="other" control={<Radio checked={visibleo} onClick={() => setVisibleO(!visibleo)} />} label={visibleo ?
-                  <TextField label="other services">
-                    disabled={!visibleo}
-                label="Please Specify"
-                onKeyDown={(e) => setOtherInfo(e.target.value)}/>  
-                  </TextField> : "other"} />
-              </RadioGroup>
-              </FormControl>
-          </div> */}
-          
-      {/* </Grid> */}
       </Grid>
     </div>
   );
