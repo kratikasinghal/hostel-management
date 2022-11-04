@@ -7,11 +7,13 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
-import { FormControl, RadioGroup, Radio, FormControlLabel, FormGroup,Checkbox,TextField } from '@mui/material'
+import { FormControl, RadioGroup, Radio, FormControlLabel, FormGroup, Checkbox, TextField } from '@mui/material'
 import { getRoles } from '../actions/userRoleActions'
 import { useDispatch, useSelector } from 'react-redux';
 import { useState, useEffect } from "react";
 import { getAllServices } from '../actions/servicesActions';
+import { createComplaint } from '../actions/complaintActions';
+import Message from './Message'
 
 const RegisterComplaint = () => {
   const theme = useTheme();
@@ -23,14 +25,17 @@ const RegisterComplaint = () => {
   const { roles } = Roles
 
   const Services = useSelector(state => state.getAllServices)
-  const {services} = Services
+  const { services } = Services
+  
+const Complaint = useSelector(state => state.createComplaint)
+const {success,complaint} = Complaint
 
   const [servicesChecked, setServicesChecked] = useState([])
-  
-  const handleChecked = (event,key) => {
-    if(event.target.checked){
-        setServicesChecked(prevState => [...prevState,key])
-    }else if(!event.target.checked){
+
+  const handleChecked = (event, key) => {
+    if (event.target.checked) {
+      setServicesChecked(prevState => [...prevState, key])
+    } else if (!event.target.checked) {
       setServicesChecked(prevstate => prevstate.filter(s => s !== key))
     }
   }
@@ -38,15 +43,17 @@ const RegisterComplaint = () => {
   const handleChange = (event) => {
     setValue(event.target.value);
   };
-  
+
   useEffect(() => {
     if (!roles)
       dispatch(getRoles(['admin', 'resident']))
-    if(value !== ''){
+    if (value !== '') {
       dispatch(getAllServices([value]))
       setServicesChecked([])
     }
-  }, [dispatch, roles,value])
+    if(complaint)
+      setActiveStep(0)
+  }, [dispatch, roles, value,complaint])
 
   const departments = (
     <React.Fragment>
@@ -63,27 +70,42 @@ const RegisterComplaint = () => {
     </React.Fragment>
   )
 
-    const [other,setOther] = useState(false)
-    const [custom,setCustom] = useState("")
-    const handleOther = () => {
-      setServicesChecked([])
-      setOther(prev => !prev)
-    }
+  const [other, setOther] = useState(false)
+  const [custom, setCustom] = useState("")
+  const handleOther = () => {
+    setServicesChecked([])
+    setOther(prev => !prev)
+  }
   const service = (
     <React.Fragment>
       <FormControl>
         <FormGroup>
-          {!other && services && services.map(s => <FormControlLabel label={s.description} key={s.slug}  control ={<Checkbox value={s.slug}  />} onChange={e => handleChecked(e,s.slug)}/>)}
-          <FormControlLabel label="Other" key="other" control= {<Checkbox value="other" checked={other} onChange={handleOther}/>} />
+          {!other && services && services.map(s => <FormControlLabel label={s.description} key={s.slug} control={<Checkbox value={s.slug} />} onChange={e => handleChecked(e, s.slug)} />)}
+          <FormControlLabel label="Other" key="other" control={<Checkbox value="other" checked={other} onChange={handleOther} />} />
           {other && <TextField value={custom} onChange={e => setCustom(e.target.value)} rows={2}></TextField>}
         </FormGroup>
       </FormControl>
     </React.Fragment>
   )
 
+  const registerComplaint = () => {
+    let type, descriptionCustom, descriptionStandard = []
+    if(other) {
+      type = "Custom"
+      descriptionCustom = custom
+    }
+    else {
+      type = "Standard"
+      descriptionStandard = servicesChecked
+    }
+    
+    dispatch(createComplaint(type,descriptionCustom,descriptionStandard))
+    
+  }
+
   const register = (
     <React.Fragment>
-
+      <Button variant="contained" color="success" sx={{ margin: "30% 20%" }} onClick={registerComplaint}>REGISTER YOUR COMPLAINT</Button>
     </React.Fragment>
   )
   const steps = [
@@ -113,6 +135,7 @@ const RegisterComplaint = () => {
 
   return (
     <Box sx={{ maxWidth: 400, flexGrow: 1 }}>
+      {success && <Message severity="success" message="Complaint Registerd!" open={true}/>}
       <Paper
         square
         elevation={0}
@@ -126,7 +149,7 @@ const RegisterComplaint = () => {
       >
         <Typography>{steps[activeStep].label}</Typography>
       </Paper>
-      <Box sx={{ height: 330 , maxWidth: 400, width: '100%', p: 2 }}>
+      <Box sx={{ height: 330, maxWidth: 400, width: '100%', p: 2 }}>
         {steps[activeStep].description}
       </Box>
       <MobileStepper
@@ -138,7 +161,7 @@ const RegisterComplaint = () => {
           <Button
             size="small"
             onClick={handleNext}
-            disabled={activeStep === maxSteps - 1}
+            disabled={activeStep === maxSteps - 1 || (activeStep === 0 && value === '') || (activeStep === 1 && ((!other && servicesChecked.length === 0) || (other && custom === '')))}
           >
             Next
             {theme.direction === 'rtl' ? (

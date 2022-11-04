@@ -2,7 +2,6 @@ import axios from "axios";
 import { GET_ROLES_SUCCESS, GET_ROLES_FAIL, GET_ROLES_REQUEST } from "../constants/userRoleConstants";
 
 const getRoles = (excludedRoles) => async (dispatch, getState) => {
-    console.log(excludedRoles)
     try {
         dispatch({
             type: GET_ROLES_REQUEST
