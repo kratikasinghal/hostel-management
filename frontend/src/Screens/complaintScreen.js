@@ -92,4 +92,4 @@ const ComplaintScreen = () => {
   )
 }
 
-export default ComplaintScreen
+export default ComplaintScreen;
