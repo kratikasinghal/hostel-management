@@ -4,8 +4,7 @@ import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import Link from '@mui/material/Link';
-
+import { Link } from "react-router-dom";
 
 export default function ButtonAppBar() {
   return (
@@ -16,7 +15,7 @@ export default function ButtonAppBar() {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1,marginLeft:"10px" }}>
             BINARY CODERS
           </Typography>
-          <Button color="inherit"><Link to="/FormPage" color="inherit" underline="none" >JOIN US</Link></Button>
+          <Button color="inherit"><Link to="../FormPage" style={{color:'white',textDecoration:'none'}} >JOIN US</Link></Button>
           <Button color="inherit">LOGOUT</Button>
         </Toolbar>
       </AppBar>
