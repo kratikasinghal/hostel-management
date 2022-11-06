@@ -18,6 +18,7 @@ import Announcement from "../components/Announcement";
 import { getAllAnnouncements } from "../actions/announcementActions";
 import DynamicFeedIcon from '@mui/icons-material/DynamicFeed';
 import RegisterComplaint from "../components/RegisterComplaint";
+import Header from '../components/header.js'
 
 const ResidentScreen = () => {
 
@@ -84,12 +85,17 @@ const ResidentScreen = () => {
     setShowConfirmPassword(prevShowConfirmPassword => !prevShowConfirmPassword)
   };
 
+  const handlePreviousComplaints = () => {
+    navigate('/resident/complaints')
+  }
+
   return (
     <div>
+      <Header />
       {message && <Message severity="error" message={message} open={true} />}
       {success && <Message severity="success" message="Profile Updated" open={true} />}
       <Grid container direction="row" spacing={2}>
-        <Grid item xs md={3} sx={{ textAlign: "center", margin: "2%" }}>
+        <Grid item xs md={3} sx={{ textAlign: "center", margin: "6% 2% 0 2%" }}>
           <div>
             <AccountCircleIcon fontSize="large" />
           </div>
@@ -253,9 +259,9 @@ const ResidentScreen = () => {
           </form>
           <Button
             type="submit"
-            variant="outlined" color="success"
+            variant="outlined" color="success" onClick={handlePreviousComplaints}
             sx={{
-              marginTop: "5%",
+              marginTop: "2.5%",
               width: "90%",
               padding: 1,
             }}>
@@ -264,7 +270,7 @@ const ResidentScreen = () => {
           </Button>
         </Grid>
         <Divider orientation="vertical" flexItem={true} />
-        <Grid item md={5}>
+        <Grid item md={5} sx={{ margin: "6% 0 0 0" }}>
           <Typography
             variant="h5"
             textAlign={"center"}
@@ -281,7 +287,7 @@ const ResidentScreen = () => {
           {announcements && announcements.map(announcement => <Announcement date={announcement.date.split("T")[0]} key={announcement._id}>{announcement.description}</Announcement>)}
         </Grid>
         <Divider orientation="vertical" flexItem={true} />
-        <Grid item md={3} sx={{ margin: "2%" }}>
+        <Grid item md={3} sx={{ margin: "6% 2% 0 2%" }}>
           <DynamicFeedIcon sx={{ margin: "0 45%" }} fontSize="large" />
           <Typography
             variant="h5"

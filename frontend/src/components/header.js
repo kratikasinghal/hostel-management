@@ -4,19 +4,26 @@ import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
+import {logout} from '../actions/userActions'
+import { useDispatch } from 'react-redux';
 
+export default function Header() {
+  const dispatch = useDispatch()
 
-export default function ButtonAppBar() {
+  const handleLogOut = () => {
+    dispatch(logout())
+  }
+
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static" style={{ background: '#33691e' }}>
+      <AppBar position="fixed" elevation={0} style={{ background: '#fff', borderBottom: '#388e3c 3px solid', color: '#388e3c' }}>
         <Toolbar>
        
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1,marginLeft:"10px" }}>
+          <Typography variant="h5" component="div" sx={{ flexGrow: 1,marginLeft:"10px" }}>
             BINARY CODERS
           </Typography>
           <Button color="inherit">JOIN US</Button>
-          <Button color="inherit">LOGOUT</Button>
+          <Button color="inherit" onClick={handleLogOut}>LOGOUT</Button>
         </Toolbar>
       </AppBar>
     </Box>

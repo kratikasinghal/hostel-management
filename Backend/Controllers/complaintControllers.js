@@ -43,6 +43,7 @@ const deleteComplaint = expressAsyncHandler(async (req, res) => {
   const complaint = await Complaint.findById(req.params.id)
   if(complaint) {
     complaint.status = Status.deferred 
+    complaint.save()
   }else {
     res.json(401)
     throw new Error("No Complaint Found!")
@@ -54,7 +55,7 @@ const deleteComplaint = expressAsyncHandler(async (req, res) => {
 //@routes /api/complaints/getByIssue
 //@access Protected
 const getForResident = expressAsyncHandler(async (req, res) => {
-  const query = {};
+  const query = {createdBy: req.user.email};
   if (Array.isArray(req.query.issueType)) {
     query.issueType = { $in: req.query.issueType };
   } else if (req.query.issueType) {
@@ -67,9 +68,25 @@ const getForResident = expressAsyncHandler(async (req, res) => {
     query.status = { $in: req.query.status };
   }
   try {
-    const complaints = await Complaint.find(query);
-
-    res.status(201).send(complaints);
+    const complaints = await Complaint.find(query).populate([
+      { path: "standardComplaintDescriptionInfo", select:"description"}
+    ]);
+    const complaintsInfo = [];
+    for (let complaint of complaints) {
+      let info = {};
+      info.id = complaint._id;
+      info.createdBy = complaint.createdBy;
+      info.createdOnDate = complaint.createdOnDate;
+      info.complaintType = complaint.complaintType;
+      info.issueType = complaint.issueType;
+      info.assignedOnDate = complaint.assignedOnDate;
+      info.status = complaint.status;
+      info.descriptionStandard = complaint.descriptionStandard;
+      info.descriptionCustom = complaint.descriptionCustom;
+      info.standardComplaintDescriptionInfo = complaint.standardComplaintDescriptionInfo
+      complaintsInfo.push(info);
+    }
+    res.status(201).send(complaintsInfo);
   } catch (e) {
     console.log(e);
   }
