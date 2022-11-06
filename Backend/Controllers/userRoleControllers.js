@@ -35,7 +35,7 @@ const createUserRole = expressAsyncHandler( async(req,res) => {
 const deleteUserRole = expressAsyncHandler( async(req,res) => {
     const role = await Role.findOne({slug:req.params.slug})
     if(role) {
-        await role.remove()
+        await Role.deleteOne({slug:req.params.slug})
         res.json({ message: "User Role removed" })
     } else {
         res.status(404)

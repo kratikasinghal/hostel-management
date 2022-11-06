@@ -32,6 +32,7 @@ const registerUser = expressAsyncHandler(async (req, res) => {
 
     if (user) {
       res.status(201).json({
+        id: user._id,
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
@@ -79,47 +80,55 @@ const authUser = expressAsyncHandler(async (req, res) => {
 //@desc get user Profile
 //@route /api/users/:id
 //@access PROTECTED
-const getProfile = expressAsyncHandler(async (req, res) => {
-  const user = await User.findOne({
-    _id: new mongoose.Types.ObjectId(req.params.id),
-  }).populate([{ path: "userRoleInfo", select: "name slug" }]);
-
-  if (user) {
-    res.status(201).json({
-      firstName: user.firstName,
-      lastName: user.lastName,
-      email: user.email,
-      phoneNumber: user.phoneNumber,
-      address: user.address,
-      userRole: user.userRole,
-      userRoleInfo: user.userRoleInfo,
-    });
-  } else {
-    res.status(404);
-    throw new Error("User not Found");
-  }
-});
+const getProfile = expressAsyncHandler( async(req,res) => {
+    
+    const user = await User.findOne({_id:new mongoose.Types.ObjectId(req.params.id)}).populate([{path:"userRoleInfo", select:"name slug"}])
+    
+    if(user) {
+        res.status(201).json({
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            phoneNumber: user.phoneNumber,
+            address: user.address,
+            userRole: user.userRole,
+            userRoleInfo: user.userRoleInfo
+        })
+    }else{
+        res.status(404)
+        throw new Error('User not Found')
+    }
+})
 
 //@desc get users
 //@route /api/users/getUsers
 //@access PUBLIC
-const getUsers = expressAsyncHandler(async (req, res) => {
-  const query = {};
-  if (Array.isArray(req.query.includedRoles)) {
-    query.userRole = { $in: req.query.includedRoles };
-  } else if (req.query.includedRoles) {
-    query.userRole = { $in: [req.query.includedRoles] };
-  }
-  try {
-    const users = await User.find(query).populate([
-      { path: "userRoleInfo", select: "name slug" },
-    ]);
-
-    res.json(users);
-  } catch (error) {
-    console.log(error);
-  }
-});
+const getUsers = expressAsyncHandler( async(req,res) => {
+    const query = {}
+    if(Array.isArray(req.query.includedRoles)){
+        query.userRole = {$in:req.query.includedRoles}
+    }else if(req.query.includedRoles) {
+        query.userRole = {$in:[req.query.includedRoles]}
+    }
+    try{
+        const users = await User.find(query).populate([{path:"userRoleInfo", select:"name slug"}])
+        const usersInfo = []
+        for(let user of users) {
+            let info = {}
+            info.firstName= user.firstName,
+            info.lastName= user.lastName,
+            info.email= user.email,
+            info.phoneNumber= user.phoneNumber,
+            info.address= user.address,
+            info.userRole= user.userRole,
+            info.userRoleInfo= user.userRoleInfo
+            usersInfo.push(info)
+        }
+        res.json(usersInfo)
+    }catch(error){
+        console.log(error)
+    }
+})
 
 //@desc Update user profile
 //@route /api/users/updateProfile
