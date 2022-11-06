@@ -6,6 +6,7 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import {logout} from '../actions/userActions'
 import { useDispatch } from 'react-redux';
+import { Link } from "react-router-dom";
 
 export default function Header() {
   const dispatch = useDispatch()
@@ -22,8 +23,8 @@ export default function Header() {
           <Typography variant="h5" component="div" sx={{ flexGrow: 1,marginLeft:"10px" }}>
             BINARY CODERS
           </Typography>
-          <Button color="inherit">JOIN US</Button>
           <Button color="inherit" onClick={handleLogOut}>LOGOUT</Button>
+          <Button color="inherit"><Link to="../FormPage" style={{color:'white',textDecoration:'none'}} >JOIN US</Link></Button>
         </Toolbar>
       </AppBar>
     </Box>

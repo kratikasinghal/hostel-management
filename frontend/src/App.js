@@ -13,6 +13,7 @@ const App = () => {
         <Route exact path="/resident/complaints" element={<ComplaintScreen />} />
       </Routes>
     </BrowserRouter>
+     
   );
 };
 
