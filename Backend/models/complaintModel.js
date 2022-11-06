@@ -42,7 +42,8 @@ const complaintSchema = mongoose.Schema({
         default: ""
     },
     otpAssigned: {
-        type: Number
+        type: Number,
+        default: ""
     }
 })
 

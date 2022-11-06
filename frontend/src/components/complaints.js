@@ -42,6 +42,7 @@ const handleClick = (event) => {
         </List>
       </React.Fragment>
     )
+
   return (
     <Card sx={{ margin: "5% 6% 0 6%", maxWidth: 550 }} variant="outlined" >
       {success && <Message severity="success" open={true} message="Complaint Deleted"/>}
@@ -102,6 +103,7 @@ const handleClick = (event) => {
               <Grid item><Chip label={complaintData.issueType} color="primary" variant="outlined" /></Grid>
               <Grid item><Chip label={complaintData.status} color="success" variant="outlined"/></Grid>
               <Grid item><Chip label={complaintData.complaintType} color="primary" variant="outlined" /></Grid>
+              {complaintData.status === 'Assigned' && <Grid item ><Typography variant="subtitle2"><b>OTP:</b>{complaintData.otpAssigned}</Typography></Grid>}
             </Grid>
           </Grid>
         </Grid>

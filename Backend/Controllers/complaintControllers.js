@@ -81,6 +81,7 @@ const getForResident = expressAsyncHandler(async (req, res) => {
       info.issueType = complaint.issueType;
       info.assignedOnDate = complaint.assignedOnDate;
       info.status = complaint.status;
+      info.otpAssigned = complaint.otpAssigned;
       info.descriptionStandard = complaint.descriptionStandard;
       info.descriptionCustom = complaint.descriptionCustom;
       info.standardComplaintDescriptionInfo = complaint.standardComplaintDescriptionInfo
