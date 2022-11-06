@@ -5,6 +5,7 @@ import { getAllAnnouncementsReducer } from "./reducers/AnnouncementReducers"
 import { getRolesReducer } from "./reducers/userRoleReducer"
 import { getAllServicesReducer } from "./reducers/servicesReducers"
 import { createComplaintReducer,getComplaintsReducer,deleteComplaintReducer } from "./reducers/complaintReducers"
+import { createRecordReducer } from "./reducers/workerFormReducer"
 
 const reducer =  {
     userRegister: userRegisterReducer,
@@ -16,7 +17,8 @@ const reducer =  {
     getAllServices: getAllServicesReducer,
     createComplaint: createComplaintReducer,
     getComplaints: getComplaintsReducer,
-    deleteComplaint: deleteComplaintReducer
+    deleteComplaint: deleteComplaintReducer,
+    createRecord: createRecordReducer
 }
 
 const userInfoFromStorage = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : null

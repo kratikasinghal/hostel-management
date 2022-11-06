@@ -16,3 +16,9 @@ export const OTPConfig = {
   lowerCaseAlphabets: false,
   specialChars: false,
 };
+
+export const workerStatus = {
+  pending: "Pending",
+  approved: "Approved",
+  declined: "Declined"
+}

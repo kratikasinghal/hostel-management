@@ -3,6 +3,7 @@ import LoginScreen from "./Screens/loginScreen";
 import { Route, Routes, BrowserRouter } from "react-router-dom";
 import ResidentScreen from "./Screens/residentScreen";
 import ComplaintScreen from "./Screens/complaintScreen"
+
 const App = () => {
   return (
     <BrowserRouter>

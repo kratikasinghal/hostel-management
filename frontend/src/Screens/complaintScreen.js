@@ -6,13 +6,14 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import Complaints from '../components/complaints.js'
 import Header from '../components/header.js';
-import { Typography, Divider,Button } from '@mui/material'
+import { Typography, Divider, Button } from '@mui/material'
 import RegisterComplaint from "../components/RegisterComplaint";
 import DynamicFeedIcon from '@mui/icons-material/DynamicFeed';
 import { useDispatch, useSelector } from 'react-redux';
 import { getRoles } from '../actions/userRoleActions'
 import { getComplaints } from '../actions/complaintActions.js';
 import Loader from '../components/Loader.js'
+import { useNavigate } from 'react-router-dom';
 
 const ComplaintScreen = () => {
   const [filters, setFilters] = useState([]);
@@ -23,9 +24,12 @@ const ComplaintScreen = () => {
   const allComplaints = useSelector(state => state.getComplaints)
   const { loading, complaints } = allComplaints
 
-  const dispatch = useDispatch()
+  const userLogin = useSelector(state => state.userLogin)
+  const { userInfo } = userLogin
 
-  
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+
   const handleChange = (event) => {
     if (event.target.checked) {
       setFilters(prevState => [...prevState, event.target.value])
@@ -43,16 +47,18 @@ const ComplaintScreen = () => {
       setDepartmentChecked(prevstate => prevstate.filter(s => s !== key))
     }
   }
-  
+
   useEffect(() => {
+    if (!userInfo)
+      navigate('/login')
     if (!roles)
       dispatch(getRoles(['admin', 'resident']))
     if (!complaints)
-      dispatch(getComplaints(['Pending','Assigned','Solved'],departmentChecked))
+      dispatch(getComplaints(['Pending', 'Assigned', 'Solved'], departmentChecked))
   }, [complaints])
 
   const applyFilter = () => {
-    dispatch(getComplaints(filters,departmentChecked))
+    dispatch(getComplaints(filters, departmentChecked))
   }
 
   return (
@@ -79,11 +85,11 @@ const ComplaintScreen = () => {
             STATUS :
           </Typography>
           <FormControl sx={{ marginTop: "5%" }}>
-            <FormControlLabel value="Pending" control={<Checkbox  onChange={e => handleChange(e)} />} label="Pending" />
+            <FormControlLabel value="Pending" control={<Checkbox onChange={e => handleChange(e)} />} label="Pending" />
 
             <FormControlLabel value="Assigned" control={<Checkbox onChange={e => handleChange(e)} />} label="Assigned" />
 
-            <FormControlLabel value="Solved" control={<Checkbox  onChange={e => handleChange(e)} />} label="Solved" />
+            <FormControlLabel value="Solved" control={<Checkbox onChange={e => handleChange(e)} />} label="Solved" />
           </FormControl>
 
           <Typography variant="body"
@@ -98,7 +104,7 @@ const ComplaintScreen = () => {
           <Button color="success" onClick={applyFilter} variant="contained">APPLY FILTER</Button>
         </Grid>
         <Divider orientation="vertical" flexItem={true} />
-        <Grid item xs={6} sx={{ textAlign: "center",margin: "7% 0 0 0" }}>
+        <Grid item xs={6} sx={{ textAlign: "center", margin: "7% 0 0 0" }}>
           {loading && <Loader />}
           {!loading && complaints && complaints.map(complaint => (<Complaints complaintData={complaint} key={complaint.id} />))}
         </Grid>
