@@ -21,6 +21,7 @@ export default function Header() {
   const navigate = useNavigate()
 
   const handleLogOut = () => {
+    navigate('/login')
     dispatch(logout())
   }
 
@@ -49,6 +50,9 @@ export default function Header() {
     }));
   }
 
+  const userLogin = useSelector(state => state.userLogin)
+  const { userInfo } = userLogin
+
   const {success,error} = useSelector(state => state.createRecord)
   const handleSubmit = () => {
     handleClose()
@@ -57,6 +61,10 @@ export default function Header() {
 
   const navigateHomePage = () => {
     navigate('/resident/homePage')
+  }
+
+  const handleWorkerPage = () => {
+    navigate('/worker/complaints')
   }
   return (
     <div>
@@ -115,6 +123,7 @@ export default function Header() {
             <Typography variant="h5" component="div" sx={{ flexGrow: 1, marginLeft: "10px" }} onClick={navigateHomePage}>
               BINARY CODERS
             </Typography>
+            {userInfo.userRole !== 'resident' && userInfo.userRole !== 'admin' && <Button color="inherit" onClick={handleWorkerPage}>WORKER PAGE</Button>}
             <Button color="inherit" onClick={handleJoinUs}>JOIN US</Button>
             <Button color="inherit" onClick={handleLogOut}>LOGOUT</Button>
           </Toolbar>

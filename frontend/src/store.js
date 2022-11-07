@@ -1,13 +1,13 @@
 import thunk from "redux-thunk"
 import { configureStore } from '@reduxjs/toolkit'
-import { userRegisterReducer,userLoginReducer,updateUserProfileReducer,userDetailsReducer } from "./reducers/userReducers"
+import { userRegisterReducer, userLoginReducer, updateUserProfileReducer, userDetailsReducer } from "./reducers/userReducers"
 import { getAllAnnouncementsReducer } from "./reducers/AnnouncementReducers"
 import { getRolesReducer } from "./reducers/userRoleReducer"
 import { getAllServicesReducer } from "./reducers/servicesReducers"
-import { createComplaintReducer,getComplaintsReducer,deleteComplaintReducer } from "./reducers/complaintReducers"
+import { createComplaintReducer, getComplaintsReducer, deleteComplaintReducer, getComplaintsWorkerReducer, updateComplaintSolvedReducer } from "./reducers/complaintReducers"
 import { createRecordReducer } from "./reducers/workerFormReducer"
 
-const reducer =  {
+const reducer = {
     userRegister: userRegisterReducer,
     userLogin: userLoginReducer,
     updateUserProfile: updateUserProfileReducer,
@@ -18,7 +18,9 @@ const reducer =  {
     createComplaint: createComplaintReducer,
     getComplaints: getComplaintsReducer,
     deleteComplaint: deleteComplaintReducer,
-    createRecord: createRecordReducer
+    createRecord: createRecordReducer,
+    getComplaintsWorker: getComplaintsWorkerReducer,
+    updateComplaintSolved: updateComplaintSolvedReducer
 }
 
 const userInfoFromStorage = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : null
@@ -31,7 +33,7 @@ const middleware = [thunk]
 
 const store = configureStore({
     reducer: reducer,
-    preloadedState: initialState, 
+    preloadedState: initialState,
     middleware: middleware
 })
 

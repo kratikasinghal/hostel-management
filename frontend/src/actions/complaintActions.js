@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { CREATE_COMPLAINT_REQUEST, CREATE_COMPLAINT_SUCCESS, CREATE_COMPLAINT_FAIL, GET_COMPLAINTS_REQUEST, GET_COMPLAINTS_SUCCESS, GET_COMPLAINTS_FAIL, DELETE_COMPLAINT_FAIL, DELETE_COMPLAINT_REQUEST, DELETE_COMPLAINT_SUCCESS } from '../constants/complaintConstants'
+import { CREATE_COMPLAINT_REQUEST, CREATE_COMPLAINT_SUCCESS, CREATE_COMPLAINT_FAIL, GET_COMPLAINTS_REQUEST, GET_COMPLAINTS_SUCCESS, GET_COMPLAINTS_FAIL, DELETE_COMPLAINT_FAIL, DELETE_COMPLAINT_REQUEST, DELETE_COMPLAINT_SUCCESS, GET_COMPLAINTS_WORKER_FAIL, GET_COMPLAINTS_WORKER_REQUEST, GET_COMPLAINTS_WORKER_SUCCESS, UPDATE_COMPLAINT_SOLVED_FAIL, UPDATE_COMPLAINT_SOLVED_REQUEST, UPDATE_COMPLAINT_SOLVED_SUCCESS } from '../constants/complaintConstants'
 
 const createComplaint = (type, descriptionCustom, descriptionStandard, issueType) => async (dispatch, getState) => {
     try {
@@ -84,7 +84,7 @@ const deleteComplaint = (id) => async (dispatch, getState) => {
             }
         }
 
-        const {data} = await axios.patch(`/api/complaints/delete/${id}`,{},config)
+        const { data } = await axios.patch(`/api/complaints/delete/${id}`, {}, config)
 
         dispatch({
             type: DELETE_COMPLAINT_SUCCESS,
@@ -101,4 +101,64 @@ const deleteComplaint = (id) => async (dispatch, getState) => {
     }
 }
 
-export { createComplaint, getComplaints, deleteComplaint }
+const getComplaintsWorker = (status) => async (dispatch, getState) => {
+    try {
+        dispatch({
+            type: GET_COMPLAINTS_WORKER_REQUEST
+        })
+
+        const { userLogin: { userInfo } } = getState()
+
+        const config = {
+            headers: {
+                Authorization: `Bearer ${userInfo.token}`
+            }
+        }
+
+        const { data } = await axios.get(`/api/complaints/worker/get?status=${status.join('&status=')}`, config)
+        dispatch({
+            type: GET_COMPLAINTS_WORKER_SUCCESS,
+            payload: data
+        })
+    } catch (error) {
+        dispatch({
+            type: GET_COMPLAINTS_WORKER_FAIL,
+            payload:
+                error.response && error.response.data.message
+                    ? error.response.data.message
+                    : error.message,
+        })
+    }
+}
+
+const updateComplaintSolved = (id) => async(dispatch,getState) => {
+    try {
+        dispatch({
+            type: UPDATE_COMPLAINT_SOLVED_REQUEST
+        })
+
+        const { userLogin: { userInfo } } = getState()
+
+        const config = {
+            headers: {
+                Authorization: `Bearer ${userInfo.token}`
+            }
+        }
+
+        const { data } = await axios.patch('/api/complaints/worker/update',{id}, config)
+        dispatch({
+            type: UPDATE_COMPLAINT_SOLVED_SUCCESS,
+            payload: data
+        })
+    } catch (error) {
+        dispatch({
+            type: UPDATE_COMPLAINT_SOLVED_FAIL,
+            payload:
+                error.response && error.response.data.message
+                    ? error.response.data.message
+                    : error.message,
+        })
+    }
+}
+
+export { createComplaint, getComplaints, deleteComplaint, getComplaintsWorker,updateComplaintSolved }

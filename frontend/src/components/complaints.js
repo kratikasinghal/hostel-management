@@ -6,7 +6,7 @@ import MenuItem from '@mui/material/MenuItem';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import List from '@mui/material/List';
 import ListItemText from '@mui/material/ListItemText';
-import { useSelector,useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import Message from '../components/Message'
 import { deleteComplaint } from "../actions/complaintActions";
 
@@ -18,10 +18,10 @@ const Complaints = ({ complaintData }) => {
   const open = Boolean(anchorEl);
 
   const dispatch = useDispatch()
-  const {success} = useSelector(state => state.deleteComplaint)
-const handleClick = (event) => {
-  setAnchorEl(event.currentTarget);
-}
+  const { success } = useSelector(state => state.deleteComplaint)
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  }
 
   const handleDelete = (event) => {
     dispatch(deleteComplaint(complaintData.id))
@@ -45,7 +45,7 @@ const handleClick = (event) => {
 
   return (
     <Card sx={{ margin: "5% 6% 0 6%", maxWidth: 550 }} variant="outlined" >
-      {success && <Message severity="success" open={true} message="Complaint Deleted"/>}
+      {success && <Message severity="success" open={true} message="Complaint Deleted" />}
       <CardContent>
         <Grid container direction="column" spacing={1} alignItems="flex-start">
           <Grid item md={12} sx={{ width: "100%" }}>
@@ -99,9 +99,9 @@ const handleClick = (event) => {
           </Grid>
           <Grid item>
             <Grid container justifyContent="center"
-  spacing={1}>
+              spacing={1}>
               <Grid item><Chip label={complaintData.issueType} color="primary" variant="outlined" /></Grid>
-              <Grid item><Chip label={complaintData.status} color="success" variant="outlined"/></Grid>
+              <Grid item><Chip label={complaintData.status} color="success" variant="outlined" /></Grid>
               <Grid item><Chip label={complaintData.complaintType} color="primary" variant="outlined" /></Grid>
               {complaintData.status === 'Assigned' && <Grid item ><Typography variant="subtitle2"><b>OTP:</b>{complaintData.otpAssigned}</Typography></Grid>}
             </Grid>
