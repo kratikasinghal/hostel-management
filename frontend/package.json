@@ -1,6 +1,6 @@
 {
   "name": "avishkar",
-  "proxy":"localhost:3000",
+  "proxy":"https://localhost:3000",
   "version": "0.1.0",
   "license": "UNLICENSED",
   "private":true,
