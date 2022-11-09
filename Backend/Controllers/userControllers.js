@@ -101,17 +101,17 @@ const getProfile = expressAsyncHandler( async(req,res) => {
 })
 
 //@desc get users
-//@route /api/users/getUsers
-//@access PUBLIC
+//@route /api/users/admin/getUsers
+//@access ADMIN
 const getUsers = expressAsyncHandler( async(req,res) => {
     const query = {}
-    if(Array.isArray(req.query.includedRoles)){
-        query.userRole = {$in:req.query.includedRoles}
-    }else if(req.query.includedRoles) {
-        query.userRole = {$in:[req.query.includedRoles]}
+    if(Array.isArray(req.query.excludedRoles)){
+        query.userRole = {$nin:req.query.excludedRoles}
+    }else if(req.query.excludedRoles) {
+        query.userRole = {$nin:[req.query.excludedRoles]}
     }
     try{
-        const users = await User.find(query).populate([{path:"userRoleInfo", select:"name slug"}])
+        const users = await User.find(query).populate([{path:"workerInfo", select:"experience"}])
         const usersInfo = []
         for(let user of users) {
             let info = {}
@@ -121,7 +121,7 @@ const getUsers = expressAsyncHandler( async(req,res) => {
             info.phoneNumber= user.phoneNumber,
             info.address= user.address,
             info.userRole= user.userRole,
-            info.userRoleInfo= user.userRoleInfo
+            info.workerInfo= user.workerInfo
             usersInfo.push(info)
         }
         res.json(usersInfo)

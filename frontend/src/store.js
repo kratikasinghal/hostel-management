@@ -1,12 +1,11 @@
 import thunk from "redux-thunk"
 import { configureStore } from '@reduxjs/toolkit'
-import { userRegisterReducer, userLoginReducer, updateUserProfileReducer, userDetailsReducer,updateUserRoleReducer } from "./reducers/userReducers"
-import { getAllAnnouncementsReducer,deleteAnnouncementReducer,updateAnnouncementReducer,createAnnouncementReducer } from "./reducers/AnnouncementReducers"
+import { userRegisterReducer, userLoginReducer, updateUserProfileReducer, userDetailsReducer, updateUserRoleReducer,getWorkersReducer } from "./reducers/userReducers"
+import { getAllAnnouncementsReducer, deleteAnnouncementReducer, updateAnnouncementReducer, createAnnouncementReducer } from "./reducers/AnnouncementReducers"
 import { getRolesReducer } from "./reducers/userRoleReducer"
 import { getAllServicesReducer } from "./reducers/servicesReducers"
-import { createComplaintReducer, getComplaintsReducer, deleteComplaintReducer, getComplaintsWorkerReducer, updateComplaintSolvedReducer } from "./reducers/complaintReducers"
-import { createRecordReducer,getRecordsReducer,updateWorkerStatusReducer } from "./reducers/workerFormReducer"
-import { create } from "@mui/material/styles/createTransitions"
+import { createComplaintReducer, getComplaintsReducer, deleteComplaintReducer, getComplaintsWorkerReducer, updateComplaintSolvedReducer, getComplaintsAdminReducer,updateComplaintAssignedReducer } from "./reducers/complaintReducers"
+import { createRecordReducer, getRecordsReducer, updateWorkerStatusReducer } from "./reducers/workerFormReducer"
 
 const reducer = {
     userRegister: userRegisterReducer,
@@ -27,7 +26,10 @@ const reducer = {
     updateUserRole: updateUserRoleReducer,
     deleteAnnouncement: deleteAnnouncementReducer,
     updateAnnouncement: updateAnnouncementReducer,
-    createAnnouncement: createAnnouncementReducer
+    createAnnouncement: createAnnouncementReducer,
+    getComplaintsAdmin: getComplaintsAdminReducer,
+    getWorkers: getWorkersReducer,
+    updateComplaintAssigned: updateComplaintAssignedReducer
 }
 
 const userInfoFromStorage = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : null

@@ -3,6 +3,7 @@ import { Card, CardContent, Typography, Grid,Divider,Button } from "@mui/materia
 import {useSelector,useDispatch} from 'react-redux'
 import Message from './Message'
 import { deleteAnnouncement } from "../actions/announcementActions";
+import {useLocation} from 'react-router-dom'
 
 const Announcement = ({date,id,children}) => {
   const dispatch = useDispatch()
@@ -11,6 +12,7 @@ const Announcement = ({date,id,children}) => {
   const handleDeleteAnnouncement = () => {
     dispatch(deleteAnnouncement(id))
   }
+  const location = useLocation()
   return (
     <Card sx={{ margin: "5% 3% 0 3%" }} variant="outlined" key={id}>
       {success && <Message severity="success" open={true} message="Announcement Deleted"/>}
@@ -27,7 +29,7 @@ const Announcement = ({date,id,children}) => {
             </Typography>
           </Grid>
         </Grid>
-        {userInfo.userRole === 'admin' && 
+        {userInfo.userRole === 'admin' && location.pathname === "/admin/announcementScreen" &&
           <Grid container direction="row" >
             <Divider flexItem={true}/>
               <Grid item md={6} sx={{paddingLeft: "10%"}}>

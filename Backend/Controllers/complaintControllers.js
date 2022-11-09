@@ -109,6 +109,12 @@ const getForAdmin = expressAsyncHandler(async (req, res) => {
   } else if (req.query.status) {
     query.status = { $in: req.query.status };
   }
+
+  if (Array.isArray(req.query.complaintType)) {
+    query.complaintType = { $in: req.query.complaintType };
+  } else if (req.query.complaintType) {
+    query.complaintType = { $in: req.query.complaintType };
+  }
   try {
     const q = "email firstName lastName phoneNumber address userRole";
     const complaints = await Complaint.find(query).populate([
@@ -184,8 +190,7 @@ const getForWorker = expressAsyncHandler(async (req, res) => {
 const updateAdmin = expressAsyncHandler(async (req, res) => {
   const complaint = await Complaint.findById(req.body.id);
   if (complaint) {
-    if (req.body.status === Status.assigned) {
-      complaint.status = req.body.status;
+      complaint.status = 'Assigned';
       complaint.assignedTo = req.body.assignedTo;
       complaint.assignedBy = req.user.email;
       complaint.assignedOnDate = new Date();
@@ -205,13 +210,6 @@ const updateAdmin = expressAsyncHandler(async (req, res) => {
         assignedPersonInfo: updatedComplaint.assignedPersonInfo,
         assignedBy: updatedComplaint.assignedBy,
       });
-    } else if (req.body.status === Status.solved) {
-      complaint.status = req.body.status;
-      const updatedComplaint = await complaint.save();
-      res.json({
-        status: updatedComplaint.status,
-      });
-    }
   } else {
     res.status(401);
     throw new Error("Complaint not found");

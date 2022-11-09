@@ -1,5 +1,4 @@
 import React from 'react'
-import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
@@ -9,161 +8,95 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import {Select, MenuItem,FormControl,InputLabel, Card,Box,CardContent } from '@mui/material';
-import { useState } from 'react';
-import Popover from '@mui/material/Popover';
-
+import { FormControl } from '@mui/material';
+import { useState, useEffect } from 'react';
+import { Box } from '@mui/material';
+import { useSelector, useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { getRoles } from '../actions/userRoleActions'
+import ComplaintAdmin from '../components/complaintAdmin';
+import { getComplaintsAdmin } from '../actions/complaintActions'
+import Loader from '../components/Loader'
+import { getWorkers } from '../actions/userActions';
 
 const AssignPending = () => {
-    const [open, setOpen] = React.useState(false);
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
 
-    const handleFILTER = () => {
-      setOpen(true);
-    };
-  
-    const handleClose = () => {
-      setOpen(false);
-    };
-    
-    const handleSubmit = () => {
-        handleClose()
-    };
-    const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
-    const [assignTo, setAssignTo] = React.useState('');
+  const userLogin = useSelector(state => state.userLogin)
+  const { userInfo } = userLogin
 
-    const handleChange = (event) => {
-      setAssignTo(event.target.value);
-    };
-    const [anchorEl, setAnchorEl] = React.useState(null);
+  const Roles = useSelector(state => state.getRoles)
+  const { roles } = Roles
 
-    const handlePopoverOpen = (event) => {
-      setAnchorEl(event.currentTarget);
-    };
-  
-    const handlePopoverClose = () => {
-      setAnchorEl(null);
-    };
-  
-    const openPop = Boolean(anchorEl);
+  const { loading, complaints } = useSelector(state => state.getComplaintsAdmin)
+
+  const { workers } = useSelector(state => state.getWorkers)
+
+  useEffect(() => {
+    if (!userInfo)
+      navigate('login')
+    if (!roles)
+      dispatch(getRoles(['admin', 'resident']))
+    if (!complaints)
+      dispatch(getComplaintsAdmin(['Pending'], [], 'Custom'))
+    if (!workers)
+      dispatch(getWorkers(['admin', 'resident']))
+  }, [])
+
+  const [open, setOpen] = React.useState(false);
+
+  const [departmentChecked, setDepartmentChecked] = useState([])
+
+  const handleChecked = (event, key) => {
+    if (event.target.checked) {
+      setDepartmentChecked(prevState => [...prevState, key])
+    } else if (!event.target.checked) {
+      setDepartmentChecked(prevstate => prevstate.filter(s => s !== key))
+    }
+  }
+
+  const handleFILTER = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleSubmit = () => {
+    handleClose()
+    dispatch(getComplaintsAdmin(['Pending'], departmentChecked, 'Custom'))
+  };
+
 
   return (
     <div>
-          <AdminMenu />
-          <Dialog open={open}>
+      <AdminMenu />
+      <Dialog open={open}>
         <DialogTitle>FILTER</DialogTitle>
         <DialogContent>
-          <FormControl sx={{ width: "80%", marginTop: "1%" }}
-            variant="outlined">
-              <FormControlLabel control={<Checkbox />} label="ELECTRICIAN" />
-          </FormControl>
-          <FormControl sx={{ width: "80%", marginTop: "2%" }} variant="outlined">
-                      <FormControlLabel control={<Checkbox />} label="CARPENTER" />
-          </FormControl>
-          <FormControl sx={{ width: "80%", marginTop: "2%" }} variant="outlined">
-                      <FormControlLabel control={<Checkbox />} label="PLUMBER" />
+          <FormControl>
+            {roles && roles.map(role => <FormControlLabel value={role.slug} control={<Checkbox onChange={e => handleChecked(e, role.slug)} />} label={role.name} key={role._id} />)}
           </FormControl>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
           <Button onClick={handleSubmit} >Filter</Button>
         </DialogActions>
-          </Dialog>
-          <Box
-              m={1} display="flex" justifyContent="flex-end" alignItems="flex-end">
-          <Button onClick={handleFILTER}  sx={{background:"#fff",margin: "0 0 0 94%",color:"green",border:"1px solid green",borderRadius:"4px"}}>FILTER</Button>
-          </Box>
-              
-                   <Typography variant="h4"sx={{textAlign:"center",color:"green"}}>PENDING COMPLAINTS</Typography> 
-                  <Card variant="outlined" sx={{marginLeft:"25%",maxWidth:"800px"}} >
-                      <CardContent>
-                          <Typography>ASSIGNED BY: abc</Typography>
-                          <Typography>EMAIL ID: abc@gmail.com</Typography>
-                          <Typography>PH NO: 9873695327</Typography>
-                          <Typography>ADDRESS:bcd</Typography>
-                  <Typography>DESCRIPTION:</Typography>
-                  <Box sx={{ maxWidth: 150,marginTop:"2%" }}>
-      <FormControl fullWidth>
-     <InputLabel id="assignMenu">ASSIGN TO</InputLabel>
-        <Select
-          labelId="assignMenu"
-          id="assignMenu"
-          value={assignTo}
-          label="assignTo"
-          onChange={handleChange}
-        >
-          <MenuItem value={10}><Typography
-        aria-owns={openPop ? 'mouse-over-popover' : undefined}
-        aria-haspopup="true"
-        onMouseEnter={handlePopoverOpen}
-        onMouseLeave={handlePopoverClose}
-      >
-        Worker 1
-      </Typography>
-      <Popover
-        id="mouse-over-popover"
-        sx={{
-          pointerEvents: 'none',
-        }}
-        open={openPop}
-        anchorEl={anchorEl}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'right',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'left',
-        }}
-        onClose={handlePopoverClose}
-        disableRestoreFocus
-      >
-                                      <Typography sx={{ p: 1 }}>NAME:Kratika<br />
-                                          PH NO: 9873695327<br />
-                                          EXPERIENCE:0-2yrs
-        </Typography>
-      </Popover></MenuItem>
-          <MenuItem value={20}><Typography
-        aria-owns={openPop ? 'mouse-over-popover' : undefined}
-        aria-haspopup="true"
-        onMouseEnter={handlePopoverOpen}
-        onMouseLeave={handlePopoverClose}
-      >
-        Worker 2
-      </Typography>
-      <Popover
-        id="mouse-over-popover"
-        sx={{
-          pointerEvents: 'none',
-        }}
-        open={openPop}
-        anchorEl={anchorEl}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'right',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'left',
-        }}
-        onClose={handlePopoverClose}
-        disableRestoreFocus
-      >
-                                      <Typography sx={{ p: 1 }}>NAME:Kratika<br />
-                                          PH NO: 9873695327<br />
-                                          EXPERIENCE:0-2yrs
-        </Typography>
-      </Popover></MenuItem>
-          <MenuItem value={30}>Worker 3</MenuItem>
-        </Select>
-      </FormControl>
-    </Box>
-                          <Button variant="contained" color="success" sx={{marginLeft:"85%"}}>ASSIGN</Button>
-                      </CardContent>
-                      </Card>
-      </div>
-     
-    )
+      </Dialog>
+      <Box
+        m={1} display="flex" justifyContent="flex-end" alignItems="flex-end" >
+        <Button onClick={handleFILTER} variant="contained" color="success">FILTER</Button>
+      </Box>
+
+      <Typography variant="h4" sx={{ textAlign: "center", color: "green" }}>PENDING COMPLAINTS</Typography>
+      {loading && <Loader />}
+      {complaints && workers &&complaints.map(complaint => (<ComplaintAdmin complaintData={complaint} key={complaint.id} allWorkers={workers}/>))}
+    </div>
+
+  )
 }
 
 
-export default AssignPending;
+export default AssignPending
