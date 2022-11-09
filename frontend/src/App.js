@@ -6,6 +6,7 @@ import ComplaintScreen from "./Screens/complaintScreen";
 import ApproveScreen from "./Screens/approveScreen";
 import WorkerScreen from "./Screens/workerScreen";
 import AssignPending from "./Screens/AssignPending";
+import AnnouncementScreen from './Screens/AnnouncementScreen'
 const App = () => {
   return (
     <BrowserRouter>
@@ -17,6 +18,7 @@ const App = () => {
         <Route exact path="/admin/approveScreen" element={<ApproveScreen />} />
         <Route exact path="/resident/complaints" element={<ComplaintScreen />} />
         <Route exact path="/worker/complaints" element={<WorkerScreen />} />
+        <Route exact path='/admin/announcementScreen' element={<AnnouncementScreen />}/>
       </Routes>
     </BrowserRouter>
 

@@ -26,7 +26,6 @@ const createAnnouncement = expressAsyncHandler(async(req,res) => {
 //@route /api/announcement/delete
 //@access Admin
 const deleteAnnouncement = expressAsyncHandler(async(req,res) => {
-    console.log(req.params.id)
     try{
         await Announcement.deleteOne({_id: new mongoose.Types.ObjectId(req.params.id)})
         res.status(201).json({

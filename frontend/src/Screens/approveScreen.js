@@ -23,7 +23,7 @@ const ApproveScreen = () => {
   return (
     <div>
       <AdminMenu />
-      <Grid container spacing={3} direction="row" sx={{ justifyContent: "center", margin: "0 0 0 6%" }}>
+      <Grid container spacing={3} direction="row" sx={{ flexGrow: 1, p: 3, width: { sm: 'calc(100% - 240px)' }, margin: "0 0 0 17%" }}>
         {loading && <Loader />}
         {records && records.map(record => (
           <Grid item key={record.id}>
