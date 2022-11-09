@@ -1,82 +1,3 @@
-// import * as React from 'react';
-// import { styled, useTheme } from '@mui/material/styles';
-// import Box from '@mui/material/Box';
-// import PropTypes from 'prop-types';
-// import Drawer from '@mui/material/Drawer';
-// import CssBaseline from '@mui/material/CssBaseline';
-// import Button from '@mui/material/Button';
-// import Toolbar from '@mui/material/Toolbar';
-// import List from '@mui/material/List';
-// import Typography from '@mui/material/Typography';
-// import Divider from '@mui/material/Divider';
-// import ListItem from '@mui/material/ListItem';
-// import ListItemButton from '@mui/material/ListItemButton';
-// import ListItemIcon from '@mui/material/ListItemIcon';
-// import ListItemText from '@mui/material/ListItemText';
-// import AssignmentIcon from '@mui/icons-material/Assignment';
-// import UpdateIcon from '@mui/icons-material/Update';
-// import DeleteIcon from '@mui/icons-material/Delete';
-// import MarkChatReadIcon from '@mui/icons-material/MarkChatRead';
-// import { Link } from "react-router-dom";
-
-// const drawerWidth = 240;
-
-// const { window } = props;
-//   const [mobileOpen, setMobileOpen] = React.useState(false);
-
-//   const handleDrawerToggle = () => {
-//     setMobileOpen(!mobileOpen);
-//   };
-// export default function AdminMenu() {
-//   return (
-//    <List>
-//         <Toolbar>
-//           <Typography variant="h6" noWrap component="div" flexGrow={1}>
-//             Binary Coders
-//                   </Typography>
-//                   <Button color="inherit">LOGOUT</Button>
-//         </Toolbar>
-//               <ListItemButton>
-//         <ListItemIcon>
-//           <MarkChatReadIcon />
-//         </ListItemIcon>
-//        <Link to="../ApproveScreen" style={{textDecoration:'none',color:'black'}}> <ListItemText primary="Approve workers request" /></Link>
-//       </ListItemButton>
-//         <ListItemButton>
-//         <ListItemIcon>
-//           <AssignmentIcon />
-//         </ListItemIcon>
-//         <ListItemText primary="Assign pending complaints" />
-//       </ListItemButton>
-//       <ListItemButton>
-//         <ListItemIcon>
-//           <UpdateIcon/>
-//         </ListItemIcon>
-//         <ListItemText primary="Update Anouncements" />
-//         </ListItemButton>
-//         <ListItemButton>
-//         <ListItemIcon>
-//           <DeleteIcon/>
-//         </ListItemIcon>
-//         <ListItemText primary="Delete Anouncements" />
-//         </ListItemButton>
-//         <ListItemButton>
-//         <ListItemIcon>
-//           <UpdateIcon/>
-//         </ListItemIcon>
-//         <ListItemText primary="Update Worker Info" />
-//         </ListItemButton>
-//         <ListItemButton>
-//         <ListItemIcon>
-//           <DeleteIcon/>
-//         </ListItemIcon>
-//         <ListItemText primary="Delete worker" />
-//         </ListItemButton>
-                  
-//         </List>
-//   );
-// }
-
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import AppBar from '@mui/material/AppBar';
@@ -106,7 +27,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 
 const drawerWidth = 240;
 
-function ResponsiveDrawer(props) {
+function AdminMenu(props) {
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
@@ -115,17 +36,21 @@ function ResponsiveDrawer(props) {
   };
 
   const drawer = (
-    <div>
-          <Toolbar />
-          <Typography variant="h5" sx={{marginLeft:"40px"}}>Binary Coders</Typography>
+      <div>
+           {/* <Box sx={{ flexGrow: 1 }}>
+        <AppBar position="fixed" elevation={0} style={{ background: '#fff', borderBottom: '#388e3c 3px solid', color: '#388e3c' }}>
+              <Toolbar>
+              <Typography variant="h5" component="div" sx={{ flexGrow: 1, marginLeft: "10px" }}>
+              BINARY CODERS
+            </Typography>
+            <Button color="inherit" >FILTER</Button>
+                  <Button color="inherit">LOGOUT</Button>
+              </Toolbar>
+              </AppBar> */}
+              
+          <Typography variant="h5" sx={{marginLeft:"40px"}}>ADMIN ROLES</Typography>
           <Divider />
           <List>
-          <ListItemButton>
-       <ListItemIcon>
-       <HomeIcon/>
-       </ListItemIcon>
-       <ListItemText primary="HomePage" />
-     </ListItemButton>
           <ListItemButton>
        <ListItemIcon>
          <MarkChatReadIcon />
@@ -135,8 +60,9 @@ function ResponsiveDrawer(props) {
        <ListItemButton>
        <ListItemIcon>
          <AssignmentIcon />
-       </ListItemIcon>
-       <ListItemText primary="Assign pending complaints" />
+                  </ListItemIcon>
+                  <Link to="../AssignPending" style={{textDecoration:"none",color:'black'}}>
+       <ListItemText primary="Assign pending complaints" /></Link>
      </ListItemButton>
      <ListItemButton>
        <ListItemIcon>
@@ -162,13 +88,8 @@ function ResponsiveDrawer(props) {
        </ListItemIcon>
        <ListItemText primary="Delete worker" />
               </ListItemButton>
-              <ListItemButton>
-       <ListItemIcon>
-        <LogoutIcon/>
-       </ListItemIcon>
-       <ListItemText primary="Logout" />
-     </ListItemButton>
-          </List>
+              </List>
+              {/* </Box> */}
       </div>
   );
 
@@ -177,12 +98,13 @@ function ResponsiveDrawer(props) {
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      {/* <AppBar
+       <AppBar
         position="fixed"
         sx={{
           width: { sm: `calc(100% - ${drawerWidth}px)` },
             ml: { sm: `${drawerWidth}px` },
-            backgroundColor: "#357a38",
+            backgroundColor: "#fff",
+            borderBottom: '#388e3c 3px solid', color: '#388e3c'
         }}
       >
         <Toolbar>
@@ -200,7 +122,7 @@ function ResponsiveDrawer(props) {
                    </Typography>
                   <Button color="inherit">LOGOUT</Button>
         </Toolbar>
-      </AppBar> */}
+      </AppBar> 
       <Box
         component="nav"
         sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
@@ -244,7 +166,7 @@ function ResponsiveDrawer(props) {
   );
 }
 
-ResponsiveDrawer.propTypes = {
+AdminMenu.propTypes = {
   /**
    * Injected by the documentation to work in an iframe.
    * You won't need it on your project.
@@ -252,4 +174,4 @@ ResponsiveDrawer.propTypes = {
   window: PropTypes.func,
 };
 
-export default ResponsiveDrawer;
+export default AdminMenu;

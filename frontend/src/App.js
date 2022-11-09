@@ -4,10 +4,9 @@ import { Route, Routes, BrowserRouter } from "react-router-dom";
 import ResidentScreen from "./Screens/residentScreen";
 import Announcement from "./components/Announcement";
 import ComplaintScreen from "./Screens/complaintScreen";
-import FormPage from "./Screens/formPage";
 import ApproveScreen from "./Screens/approveScreen";
-import ComplaintScreen from "./Screens/complaintScreen"
 import WorkerScreen from "./Screens/workerScreen";
+import AssignPending from "./Screens/AssignPending";
 const App = () => {
   return (
     <BrowserRouter>
@@ -16,8 +15,8 @@ const App = () => {
         <Route exact path="/signup" element={<SignUpScreen />} />
         <Route exact path="/resident/homePage" element={<ResidentScreen />} />
         <Route exact path="/complaintScreen" element={<ComplaintScreen />} />
-        <Route exact path="/formPage" element={<FormPage />} />
         <Route exact path="/approveScreen" element={<ApproveScreen />} />
+        <Route exact path="/AssignPending" element={<AssignPending />} />
         <Route exact path="/resident/complaints" element={<ComplaintScreen />} />
         <Route exact path="/worker/complaints" element={<WorkerScreen />} />
       </Routes>

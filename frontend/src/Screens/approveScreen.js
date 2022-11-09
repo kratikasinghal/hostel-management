@@ -12,21 +12,6 @@ const ApproveScreen = () => {
               <Grid item >
                <Card variant="outlined" >
                       <CardContent>
-                       {/* <Box
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          width: 'fit-content',
-          bgcolor: 'background.paper',
-          color: 'text.secondary',
-          '& svg': {
-            m: 1.5,
-          },
-          '& hr': {
-            mx: 0.5,
-          },
-        }}
-      >  */}
                               <Grid container spacing={2} direction="row">
                                   <Grid item>
                               <Typography variant="h5">Worker's Info</Typography><br />
