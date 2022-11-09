@@ -55,7 +55,7 @@ function AdminMenu(props) {
        <ListItemIcon>
          <MarkChatReadIcon />
        </ListItemIcon>
-      <Link to="../ApproveScreen" style={{textDecoration:'none',color:'black'}}> <ListItemText primary="Approve workers request" /></Link>
+      <Link to="../admin/approveScreen" style={{textDecoration:'none',color:'black'}}> <ListItemText primary="Approve workers request" /></Link>
      </ListItemButton>
        <ListItemButton>
        <ListItemIcon>

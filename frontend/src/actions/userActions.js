@@ -11,7 +11,7 @@ import {
   USER_UPDATE_PROFILE_REQUEST,
   USER_DETAILS_FAIL,
   USER_DETAILS_REQUEST,
-  USER_DETAILS_RESET, USER_DETAILS_SUCCESS
+  USER_DETAILS_RESET, USER_DETAILS_SUCCESS,UPDATE_USER_ROLE_REQUEST,UPDATE_USER_ROLE_FAIL,UPDATE_USER_ROLE_SUCCESS
 } from "../constants/userConstants.js";
 import axios from "axios";
 
@@ -141,4 +141,33 @@ const getUserDetails = () => async (dispatch, getState) => {
   }
 }
 
-export { register, login, updateUserDetails, getUserDetails, logout };
+const updateUserRole = (role,email) => async(dispatch,getState) => {
+  try{
+    dispatch({
+      type: UPDATE_USER_ROLE_REQUEST
+    })
+
+    const { userLogin: { userInfo } } = getState()
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`
+      }
+    }
+
+    const {data} = await axios.patch('/api/users/updateUserRole',{userRole: role, email: email}, config)
+
+    dispatch({
+      type: UPDATE_USER_ROLE_SUCCESS,
+      payload: data
+    })
+
+  }catch(error) {
+    dispatch({
+      type: UPDATE_USER_ROLE_FAIL,
+      payload: error.response && error.response.data.message ? error.response.data.message : error.message,
+    })
+  }
+}
+
+export { register, login, updateUserDetails, getUserDetails, logout,updateUserRole };
