@@ -6,7 +6,7 @@ import ComplaintScreen from "./Screens/complaintScreen";
 import ApproveScreen from "./Screens/approveScreen";
 import WorkerScreen from "./Screens/workerScreen";
 import AssignPending from "./Screens/AssignPending";
-import AnnouncementScreen from './Screens/AnnouncementScreen'
+import AnnouncementScreen from './Screens/AnnouncementScreen';
 const App = () => {
   return (
     <BrowserRouter>
