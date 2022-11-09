@@ -1,6 +1,6 @@
 import expressAsyncHandler from "express-async-handler";
 import Complaint from "../models/complaintModel.js";
-import { ComplaintType,Status } from "../Constants/Constants.js";
+import { ComplaintType, Status } from "../Constants/Constants.js";
 import mongoose from "mongoose";
 import generateOTP from "../utils/generateOTP.js";
 
@@ -41,9 +41,10 @@ const createComplaint = expressAsyncHandler(async (req, res) => {
 //@access Protected
 const deleteComplaint = expressAsyncHandler(async (req, res) => {
   const complaint = await Complaint.findById(req.params.id)
-  if(complaint) {
-    complaint.status = Status.deferred 
-  }else {
+  if (complaint) {
+    complaint.status = Status.deferred
+    complaint.save()
+  } else {
     res.json(401)
     throw new Error("No Complaint Found!")
   }
@@ -54,7 +55,7 @@ const deleteComplaint = expressAsyncHandler(async (req, res) => {
 //@routes /api/complaints/getByIssue
 //@access Protected
 const getForResident = expressAsyncHandler(async (req, res) => {
-  const query = {};
+  const query = { createdBy: req.user.email };
   if (Array.isArray(req.query.issueType)) {
     query.issueType = { $in: req.query.issueType };
   } else if (req.query.issueType) {
@@ -67,9 +68,26 @@ const getForResident = expressAsyncHandler(async (req, res) => {
     query.status = { $in: req.query.status };
   }
   try {
-    const complaints = await Complaint.find(query);
-
-    res.status(201).send(complaints);
+    const complaints = await Complaint.find(query).populate([
+      { path: "standardComplaintDescriptionInfo", select: "description" }
+    ]);
+    const complaintsInfo = [];
+    for (let complaint of complaints) {
+      let info = {};
+      info.id = complaint._id;
+      info.createdBy = complaint.createdBy;
+      info.createdOnDate = complaint.createdOnDate;
+      info.complaintType = complaint.complaintType;
+      info.issueType = complaint.issueType;
+      info.assignedOnDate = complaint.assignedOnDate;
+      info.status = complaint.status;
+      info.otpAssigned = complaint.otpAssigned;
+      info.descriptionStandard = complaint.descriptionStandard;
+      info.descriptionCustom = complaint.descriptionCustom;
+      info.standardComplaintDescriptionInfo = complaint.standardComplaintDescriptionInfo
+      complaintsInfo.push(info);
+    }
+    res.status(201).send(complaintsInfo);
   } catch (e) {
     console.log(e);
   }
@@ -96,7 +114,7 @@ const getForAdmin = expressAsyncHandler(async (req, res) => {
     const complaints = await Complaint.find(query).populate([
       { path: "complaintCreatorInfo", select: q },
       { path: "assignedPersonInfo", select: q },
-      { path: "standardComplaintDescriptionInfo", select:"description"}
+      { path: "standardComplaintDescriptionInfo", select: "description" }
     ]);
     const complaintsInfo = [];
     for (let complaint of complaints) {
@@ -123,6 +141,42 @@ const getForAdmin = expressAsyncHandler(async (req, res) => {
     console.log(e);
   }
 });
+
+const getForWorker = expressAsyncHandler(async (req, res) => {
+  const query = { assignedTo: req.user.email }
+  if (Array.isArray(req.query.status)) {
+    query.status = { $in: req.query.status };
+  } else if (req.query.status) {
+    query.status = { $in: req.query.status };
+  }
+  try {
+    const q = "email firstName lastName phoneNumber address userRole";
+    const complaints = await Complaint.find(query).populate([
+      { path: "complaintCreatorInfo", select: q },
+      { path: "standardComplaintDescriptionInfo", select: "description" }
+    ]);
+    const complaintsInfo = [];
+    for (let complaint of complaints) {
+      let info = {};
+      info.id = complaint._id;
+      info.createdBy = complaint.createdBy;
+      info.complaintCreatorInfo = complaint.complaintCreatorInfo;
+      info.createdOnDate = complaint.createdOnDate;
+      info.complaintType = complaint.complaintType;
+      info.assignedTo = complaint.assignedTo;
+      info.assignedOnDate = complaint.assignedOnDate;
+      info.status = complaint.status;
+      info.descriptionStandard = complaint.descriptionStandard;
+      info.descriptionCustom = complaint.descriptionCustom;
+      info.otpAssigned = complaint.otpAssigned;
+      info.standardComplaintDescriptionInfo = complaint.standardComplaintDescriptionInfo
+      complaintsInfo.push(info);
+    }
+    res.status(201).send(complaintsInfo);
+  } catch (e) {
+    console.log(e);
+  }
+})
 
 //@desc Update information in complaints regarding status
 //@route /api/complaints/admin/update
@@ -165,38 +219,18 @@ const updateAdmin = expressAsyncHandler(async (req, res) => {
 });
 
 //@desc update description
-//@route /api/complaints/resident/update
+//@route /api/complaints/worker/update
 //@access Protected
-const updateResident = expressAsyncHandler(async (req, res) => {
-  const complaint = await  Complaint.findById(req.body.id)
-  if(complaint) {
-    complaint.issueType = req.body.issueType
-    complaint.complaintType = req.body.complaintType
-    if(req.body.complaintType === ComplaintType.custom){
-      complaint.descriptionCustom = req.body.descriptionCustom
-    }else if(req.body.complaintType === ComplaintType.standard){
-      complaint.descriptionStandard = req.body.descriptionStandard
-    }
-
-    let updatedComplaint = await complaint.save()
-    updatedComplaint = await Complaint.findById(
-      updatedComplaint._id
-    ).populate([
-      {
-        path: "standardComplaintDescriptionInfo", select:"description"
-      }
-    ]);
-    res.json({
-      issueType: updatedComplaint.issueType,
-      complaintType: updatedComplaint.complaintType,
-      descriptionCustom: updatedComplaint.descriptionCustom,
-      descriptionStandard: updatedComplaint.descriptionStandard,
-      standardComplaintDescriptionInfo: updatedComplaint.standardComplaintDescriptionInfo
-    })
-  }else {
-    res.status(401)
-    throw new Error("No Complaint foundd")
+const updateWorker = expressAsyncHandler(async (req, res) => {
+  const complaint = await Complaint.findById(req.body.id)
+  if (complaint) {
+    complaint.status = Status.solved
+    complaint.save()
+  } else {
+    res.json(401)
+    throw new Error("No Complaint Found!")
   }
+  res.json({ message: "Complaint Mark as Solved" });
 });
 export {
   createComplaint,
@@ -204,5 +238,6 @@ export {
   getForResident,
   getForAdmin,
   updateAdmin,
-  updateResident,
+  updateWorker,
+  getForWorker
 };

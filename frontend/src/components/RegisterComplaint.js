@@ -28,7 +28,7 @@ const RegisterComplaint = () => {
   const { services } = Services
   
 const Complaint = useSelector(state => state.createComplaint)
-const {success,complaint} = Complaint
+const {success} = Complaint
 
   const [servicesChecked, setServicesChecked] = useState([])
 
@@ -51,9 +51,10 @@ const {success,complaint} = Complaint
       dispatch(getAllServices([value]))
       setServicesChecked([])
     }
-    if(complaint)
+    if(success){
       setActiveStep(0)
-  }, [dispatch, roles, value,complaint])
+    }
+  }, [dispatch, roles, value,success])
 
   const departments = (
     <React.Fragment>
@@ -99,7 +100,7 @@ const {success,complaint} = Complaint
       descriptionStandard = servicesChecked
     }
     
-    dispatch(createComplaint(type,descriptionCustom,descriptionStandard))
+    dispatch(createComplaint(type,descriptionCustom,descriptionStandard,value))
     
   }
 
@@ -149,7 +150,7 @@ const {success,complaint} = Complaint
       >
         <Typography>{steps[activeStep].label}</Typography>
       </Paper>
-      <Box sx={{ height: 330, maxWidth: 400, width: '100%', p: 2 }}>
+      <Box sx={{ height: 320, width: '99%', p: 2 }}>
         {steps[activeStep].description}
       </Box>
       <MobileStepper
