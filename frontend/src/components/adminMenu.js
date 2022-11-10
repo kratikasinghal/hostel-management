@@ -18,6 +18,7 @@ import AssignmentIcon from '@mui/icons-material/Assignment';
 import UpdateIcon from '@mui/icons-material/Update';
 import DeleteIcon from '@mui/icons-material/Delete';
 import MarkChatReadIcon from '@mui/icons-material/MarkChatRead';
+import SupportAgentIcon from '@mui/icons-material/SupportAgent';
 import { Link } from "react-router-dom";
 import { logout } from '../actions/userActions'
 import { useDispatch } from 'react-redux';
@@ -60,7 +61,7 @@ function AdminMenu(props) {
           <ListItemIcon>
             <AssignmentIcon />
           </ListItemIcon>
-          <Link to="../AssignPending" style={{ textDecoration: "none", color: 'black' }}>
+          <Link to="../admin/AssignPending" style={{ textDecoration: "none", color: 'black' }}>
             <ListItemText primary="Assign pending complaints" /></Link>
         </ListItemButton>
         <ListItemButton>
@@ -73,9 +74,11 @@ function AdminMenu(props) {
         </ListItemButton>
         <ListItemButton>
           <ListItemIcon>
-            <UpdateIcon />
+            <SupportAgentIcon />
           </ListItemIcon>
-          <ListItemText primary="Update Worker Info" />
+          <Link to="../admin/ServicesScreen" style={{ textDecoration: "none", color: 'black' }}>
+            <ListItemText primary="Standard Services" />
+          </Link>
         </ListItemButton>
         <ListItemButton>
           <ListItemIcon>

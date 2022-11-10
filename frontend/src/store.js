@@ -1,10 +1,10 @@
 import thunk from "redux-thunk"
 import { configureStore } from '@reduxjs/toolkit'
-import { userRegisterReducer, userLoginReducer, updateUserProfileReducer, userDetailsReducer, updateUserRoleReducer,getWorkersReducer } from "./reducers/userReducers"
+import { userRegisterReducer, userLoginReducer, updateUserProfileReducer, userDetailsReducer, updateUserRoleReducer, getWorkersReducer } from "./reducers/userReducers"
 import { getAllAnnouncementsReducer, deleteAnnouncementReducer, updateAnnouncementReducer, createAnnouncementReducer } from "./reducers/AnnouncementReducers"
 import { getRolesReducer } from "./reducers/userRoleReducer"
-import { getAllServicesReducer } from "./reducers/servicesReducers"
-import { createComplaintReducer, getComplaintsReducer, deleteComplaintReducer, getComplaintsWorkerReducer, updateComplaintSolvedReducer, getComplaintsAdminReducer,updateComplaintAssignedReducer } from "./reducers/complaintReducers"
+import { getAllServicesReducer, deleteServiceReducer, createServiceReducer } from "./reducers/servicesReducers"
+import { createComplaintReducer, getComplaintsReducer, deleteComplaintReducer, getComplaintsWorkerReducer, updateComplaintSolvedReducer, getComplaintsAdminReducer, updateComplaintAssignedReducer } from "./reducers/complaintReducers"
 import { createRecordReducer, getRecordsReducer, updateWorkerStatusReducer } from "./reducers/workerFormReducer"
 
 const reducer = {
@@ -29,7 +29,9 @@ const reducer = {
     createAnnouncement: createAnnouncementReducer,
     getComplaintsAdmin: getComplaintsAdminReducer,
     getWorkers: getWorkersReducer,
-    updateComplaintAssigned: updateComplaintAssignedReducer
+    updateComplaintAssigned: updateComplaintAssignedReducer,
+    deleteService: deleteServiceReducer,
+    createService: createServiceReducer
 }
 
 const userInfoFromStorage = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : null
