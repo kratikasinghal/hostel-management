@@ -3,6 +3,7 @@ import User from "../models/userModel.js";
 import bcrypt from "bcryptjs";
 import generateToken from "../utils/generateToken.js";
 import mongoose from "mongoose";
+import sendEmail from "../utils/emailSender.js";
 
 //@desc Register a new User
 //@route /api/users/register
@@ -10,7 +11,6 @@ import mongoose from "mongoose";
 const registerUser = expressAsyncHandler(async (req, res) => {
   const { firstName, lastName, email, phoneNumber, address, password } =
     req.body;
-
   //validate user input
   if (!(firstName && lastName && email && phoneNumber && address && password))
     res.status(400).send("All inputs are required !!");
@@ -29,7 +29,6 @@ const registerUser = expressAsyncHandler(async (req, res) => {
       address,
       password: encryptedPassword,
     });
-
     if (user) {
       res.status(201).json({
         id: user._id,
