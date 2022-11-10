@@ -31,3 +31,5 @@ export const QueueRecordsStatues = {
   unprocessed: "UN-PROCESSED",
   failed: "FAILED",
 };
+
+export const AdminEmail = 'admin@binarycoders.com'

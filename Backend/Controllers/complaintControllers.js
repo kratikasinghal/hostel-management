@@ -1,7 +1,6 @@
 import expressAsyncHandler from "express-async-handler";
 import Complaint from "../models/complaintModel.js";
-import { ComplaintType, Status } from "../Constants/Constants.js";
-import mongoose from "mongoose";
+import { ComplaintType, Status, AdminEmail } from "../Constants/Constants.js";
 import generateOTP from "../utils/generateOTP.js";
 import assignComplaint from "../utils/automaticAssignComplaint.js";
 import axios from "axios";
@@ -20,6 +19,9 @@ const createComplaint = expressAsyncHandler(async (req, res) => {
     preparedData.descriptionStandard = req.body.descriptionStandard;
     preparedData.assignedTo = await assignComplaint(req.body.issueType);
     preparedData.status = Status.assigned;
+    preparedData.assignedBy = AdminEmail
+    preparedData.assignedOnDate = new Date()
+    preparedData.otpAssigned = generateOTP()
   } else if (complaintType === ComplaintType.custom) {
     preparedData.descriptionCustom = req.body.descriptionCustom;
   }
@@ -200,7 +202,7 @@ const getForWorker = expressAsyncHandler(async (req, res) => {
 const updateAdmin = expressAsyncHandler(async (req, res) => {
   const complaint = await Complaint.findById(req.body.id);
   if (complaint) {
-      complaint.status = 'Assigned';
+      complaint.status = Status.assigned;
       complaint.assignedTo = req.body.assignedTo;
       complaint.assignedBy = req.user.email;
       complaint.assignedOnDate = new Date();
