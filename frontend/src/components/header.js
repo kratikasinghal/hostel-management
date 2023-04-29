@@ -15,7 +15,10 @@ import { useState,useEffect } from 'react';
 import {createRecord} from '../actions/workerFormActions'
 import Message from '../components/Message'
 import { useNavigate } from 'react-router-dom';
-import {getRoles} from '../actions/userRoleActions'
+import { getRoles } from '../actions/userRoleActions'
+import Announcement from "../components/Announcement";
+import { getAllAnnouncements } from "../actions/announcementActions";
+
 
 export default function Header() {
   const dispatch = useDispatch()
@@ -79,14 +82,24 @@ export default function Header() {
   const handleAdminPage = () => {
     navigate('/admin/approveScreen')
   }
+
+  
+  const Announcements = useSelector(state => state.getAllAnnouncements)
+  const { announcements } = Announcements
+
+  const customContentStyle = {
+    width: '100%',
+    maxWidth: '90%',
+  };
+  
   return (
     <div>
       {success && <Message severity="success" message="Record Submitted" open={true}/>}
       {error && <Message severity="error" message={error} open={true}/>}
-      <Dialog open={open}>
-        <DialogTitle>JOIN US</DialogTitle>
+      <Dialog open={open} contentStyle={customContentStyle}>
+        {/* <DialogTitle>Announcement</DialogTitle> */}
         <DialogContent>
-          <FormControl sx={{ width: "99%", marginTop: "1%" }}
+          {/* <FormControl sx={{ width: "99%", marginTop: "1%" }}
             variant="outlined">
             <InputLabel htmlFor="profession">Profession</InputLabel>
             <Select
@@ -125,11 +138,25 @@ export default function Header() {
               label="referralID"
               name="referralID"
             />
-          </FormControl>
+          </FormControl> */}
+                    <Typography
+            variant="h5"
+            textAlign={"center"}
+            padding={1}
+            sx={{
+              color: "#283593",
+              fontFamily: "Arizonia",
+              marginBottom: 0,
+              marginTop: "1px",
+            }}
+          >
+            ANNOUNCEMENTS
+          </Typography>
+          {announcements && announcements.map(announcement => <Announcement date={announcement.date.split("T")[0]} key={announcement._id}>{announcement.description}</Announcement>)}
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleSubmit}>Submit</Button>
+          {/* <Button onClick={handleSubmit}>Submit</Button> */}
         </DialogActions>
       </Dialog>
       <Box sx={{ flexGrow: 1 }}>
@@ -141,7 +168,7 @@ export default function Header() {
             </Typography>
             {userInfo.userRole === 'admin' && <Button color="inherit" onClick={handleAdminPage}>ADMIN PAGE</Button>}
             {userInfo.userRole !== 'resident' && userInfo.userRole !== 'admin' && <Button color="inherit" onClick={handleWorkerPage}>WORKER PAGE</Button>}
-            {userInfo.userRole === 'resident' && <Button color="inherit" onClick={handleJoinUs}>JOIN US</Button>}
+            {userInfo.userRole === 'resident' && <Button color="inherit" onClick={handleJoinUs}>Announcements</Button>}
             <Button color="inherit" onClick={handleLogOut}>LOGOUT</Button>
           </Toolbar>
         </AppBar>

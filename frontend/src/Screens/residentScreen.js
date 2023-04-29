@@ -95,7 +95,7 @@ const ResidentScreen = () => {
       {message && <Message severity="error" message={message} open={true} />}
       {success && <Message severity="success" message="Profile Updated" open={true} />}
       <Grid container direction="row" spacing={2}>
-        <Grid item xs md={3} sx={{ textAlign: "center", margin: "6% 2% 0 2%" }}>
+        <Grid item xs md={4.5} sx={{ textAlign: "center", margin: "6% 2% 0 2%" }}>
           <div>
             <AccountCircleIcon fontSize="large" />
           </div>
@@ -269,7 +269,7 @@ const ResidentScreen = () => {
             Show Previous complaints
           </Button>
         </Grid>
-        <Divider orientation="vertical" flexItem={true} />
+        {/* <Divider orientation="vertical" flexItem={true} />
         <Grid item md={5} sx={{ margin: "6% 0 0 0" }}>
           <Typography
             variant="h5"
@@ -285,9 +285,9 @@ const ResidentScreen = () => {
             ANNOUNCEMENTS
           </Typography>
           {announcements && announcements.map(announcement => <Announcement date={announcement.date.split("T")[0]} key={announcement._id}>{announcement.description}</Announcement>)}
-        </Grid>
+        </Grid> */}
         <Divider orientation="vertical" flexItem={true} />
-        <Grid item md={3} sx={{ margin: "6% 2% 0 2%" }}>
+        <Grid item md={4.5} sx={{ margin: "6% 4% 0 6%" }}>
           <DynamicFeedIcon sx={{ margin: "0 45%" }} fontSize="large" />
           <Typography
             variant="h5"
