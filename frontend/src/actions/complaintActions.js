@@ -254,14 +254,18 @@ const getComplaintsAdmin =
         Data = await axios.get(
           `/api/complaints/admin/get?issueType=${department.join(
             "&issueType="
-          )}&complaintType=${complaintType}`,
+          )}&complaintType=${complaintType.join(
+            "&complaintType="
+          )}`,
           config
         );
       else if (status.length !== 0 && department.length === 0)
         Data = await axios.get(
           `/api/complaints/admin/get?status=${status.join(
             "&status="
-          )}&complaintType=${complaintType}`,
+          )}&complaintType=${complaintType.join(
+            "&complaintType="
+          )}`,
           config
         );
       else
@@ -270,7 +274,9 @@ const getComplaintsAdmin =
             "&status="
           )}&issueType=${department.join(
             "&issueType="
-          )}&complaintType=${complaintType}`,
+          )}&complaintType=${complaintType.join(
+            "&complaintType="
+          )}`,
           config
         );
 

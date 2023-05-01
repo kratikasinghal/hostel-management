@@ -51,12 +51,12 @@ function AdminMenu(props) {
       <Typography variant="h5" sx={{ marginLeft: "40px",marginTop:"35px" }}>ADMIN ROLES</Typography>
       <Divider />
       <List>
-        <ListItemButton>
+        {/* <ListItemButton>
           <ListItemIcon>
             <MarkChatReadIcon />
           </ListItemIcon>
           <Link to="../admin/approveScreen" style={{ textDecoration: 'none', color: 'black' }}> <ListItemText primary="Approve workers request" /></Link>
-        </ListItemButton>
+        </ListItemButton> */}
         <ListItemButton>
           <ListItemIcon>
             <AssignmentIcon />

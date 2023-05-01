@@ -15,6 +15,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { updateComplaintAssigned } from "../actions/complaintActions";
 import Message from "./Message";
 import TooltipComponent from "./TooltipComponent";
+import Stack from '@mui/material/Stack';
 
 const ComplaintAdmin = ({ complaintData, allWorkers }) => {
   const dispatch = useDispatch();
@@ -79,7 +80,7 @@ const ComplaintAdmin = ({ complaintData, allWorkers }) => {
             <b>Department : </b>
             {complaintData.issueType}
           </Typography>
-          <Box sx={{ maxWidth: 150, marginTop: "2%" }}>
+          {/* <Box sx={{ maxWidth: 150, marginTop: "2%" }}>
             <FormControl fullWidth>
               <InputLabel id="assignMenu">ASSIGN TO</InputLabel>
               <Select
@@ -99,15 +100,25 @@ const ComplaintAdmin = ({ complaintData, allWorkers }) => {
                   ))}
               </Select>
             </FormControl>
-          </Box>
+          </Box> */}
+          <Stack direction="row" spacing={2}>
           <Button
             variant="contained"
             color="success"
-            sx={{ marginLeft: "85%" }}
+            sx={{ marginLeft: "60%" }}
             onClick={handleAssign}
           >
             ASSIGN
           </Button>
+          <Button
+            variant="contained"
+            color="error"
+            sx={{ marginLeft: "75%" }}
+            onClick={handleAssign}
+          >
+            MARK AS INVALID
+            </Button>
+            </Stack>
         </CardContent>
       </Card>
     </div>

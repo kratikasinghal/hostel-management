@@ -39,7 +39,7 @@ const AssignPending = () => {
     if (!roles)
       dispatch(getRoles(['admin', 'resident']))
     if (!complaints)
-      dispatch(getComplaintsAdmin(['Pending'], [], 'Custom'))
+      dispatch(getComplaintsAdmin(['Pending'], [], ['Custom','Standard']))
     if (!workers)
       dispatch(getWorkers(['admin', 'resident']))
   }, [])
@@ -66,7 +66,7 @@ const AssignPending = () => {
 
   const handleSubmit = () => {
     handleClose()
-    dispatch(getComplaintsAdmin(['Pending'], departmentChecked, 'Custom'))
+    dispatch(getComplaintsAdmin(['Pending'], departmentChecked, ['Custom','Standard']))
   };
 
 

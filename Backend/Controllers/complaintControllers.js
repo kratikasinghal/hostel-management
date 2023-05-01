@@ -14,21 +14,15 @@ const createComplaint = expressAsyncHandler(async (req, res) => {
     createdBy: req.user.email,
     complaintType: complaintType,
     issueType: req.body.issueType,
+    descriptionCustom: req.body.descriptionCustom,
+    descriptionStandard: req.body.descriptionStandard,
+    complaintType: req.body.complaintType,
   };
-  if (complaintType === ComplaintType.standard) {
-    preparedData.descriptionStandard = req.body.descriptionStandard;
-    preparedData.assignedTo = await assignComplaint(req.body.issueType);
-    preparedData.status = Status.assigned;
-    preparedData.assignedBy = AdminEmail
-    preparedData.assignedOnDate = new Date()
-    preparedData.otpAssigned = generateOTP()
-  } else if (complaintType === ComplaintType.custom) {
-    preparedData.descriptionCustom = req.body.descriptionCustom;
-  }
+
   const complaint = await Complaint.create(preparedData);
-  await axios.post(`http://localhost:${process.env.PORT}/api/queue`, {
-    complaintId: complaint._id,
-  });
+  // await axios.post(`http://localhost:${process.env.PORT}/api/queue`, {
+  //   complaintId: complaint._id,
+  // });
   if (complaint) {
     res.status(201).json({
       id: complaint._id,
@@ -202,29 +196,27 @@ const getForWorker = expressAsyncHandler(async (req, res) => {
 const updateAdmin = expressAsyncHandler(async (req, res) => {
   const complaint = await Complaint.findById(req.body.id);
   if (complaint) {
-      complaint.status = Status.assigned;
-      complaint.assignedTo = req.body.assignedTo;
-      complaint.assignedBy = req.user.email;
-      complaint.assignedOnDate = new Date();
-      complaint.otpAssigned = generateOTP();
+    complaint.status = Status.assigned;
+    complaint.assignedTo = await assignComplaint(complaint.issueType);
+    complaint.assignedBy = req.user.email;
+    complaint.assignedOnDate = new Date();
+    complaint.otpAssigned = generateOTP();
 
-      let updatedComplaint = await complaint.save();
-      updatedComplaint = await Complaint.findById(
-        updatedComplaint._id
-      ).populate([
-        {
-          path: "assignedPersonInfo",
-          select: "email firstName lastName phoneNumber address userRole",
-        },
-      ]);
-      await axios.post(`http://localhost:${process.env.PORT}/api/queue`, {
-        complaintId: updatedComplaint,
-      });
-      res.json({
-        status: updatedComplaint.status,
-        assignedPersonInfo: updatedComplaint.assignedPersonInfo,
-        assignedBy: updatedComplaint.assignedBy,
-      });
+    let updatedComplaint = await complaint.save();
+    updatedComplaint = await Complaint.findById(updatedComplaint._id).populate([
+      {
+        path: "assignedPersonInfo",
+        select: "email firstName lastName phoneNumber address userRole",
+      },
+    ]);
+    await axios.post(`http://localhost:${process.env.PORT}/api/queue`, {
+      complaintId: updatedComplaint,
+    });
+    res.json({
+      status: updatedComplaint.status,
+      assignedPersonInfo: updatedComplaint.assignedPersonInfo,
+      assignedBy: updatedComplaint.assignedBy,
+    });
   } else {
     res.status(401);
     throw new Error("Complaint not found");

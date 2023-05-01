@@ -75,12 +75,8 @@ export default function Header() {
     navigate('/resident/homePage')
   }
 
-  const handleWorkerPage = () => {
-    navigate('/worker/complaints')
-  }
-
   const handleAdminPage = () => {
-    navigate('/admin/approveScreen')
+    navigate('/admin/AssignPending')
   }
 
   
@@ -167,7 +163,6 @@ export default function Header() {
               BINARY CODERS
             </Typography>
             {userInfo.userRole === 'admin' && <Button color="inherit" onClick={handleAdminPage}>ADMIN PAGE</Button>}
-            {userInfo.userRole !== 'resident' && userInfo.userRole !== 'admin' && <Button color="inherit" onClick={handleWorkerPage}>WORKER PAGE</Button>}
             {userInfo.userRole === 'resident' && <Button color="inherit" onClick={handleJoinUs}>Announcements</Button>}
             <Button color="inherit" onClick={handleLogOut}>LOGOUT</Button>
           </Toolbar>
