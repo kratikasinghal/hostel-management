@@ -231,9 +231,9 @@ const updateWorker = expressAsyncHandler(async (req, res) => {
   if (complaint) {
     complaint.status = Status.solved;
     complaint.save();
-    await axios.post(`http://localhost:${process.env.PORT}/api/queue`, {
-      complaintId: req.body.id,
-    });
+    // await axios.post(`http://localhost:${process.env.PORT}/api/queue`, {
+    //   complaintId: req.body.id,
+    // });
   } else {
     res.json(401);
     throw new Error("No Complaint Found!");

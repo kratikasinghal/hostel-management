@@ -45,6 +45,7 @@ const ComplaintAdmin = ({ complaintData, allWorkers }) => {
 
   const handleAssign = () => {
     dispatch(updateComplaintAssigned(complaintData.id, assignTo));
+    window.location.reload();
   };
   return (
     <div>

@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, CardContent, Typography, Grid, Chip, ListItem } from "@mui/material";
+import { Card, CardContent, Typography, Grid, Chip, ListItem, Button } from "@mui/material";
 import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -8,8 +8,7 @@ import List from '@mui/material/List';
 import ListItemText from '@mui/material/ListItemText';
 import { useSelector, useDispatch } from "react-redux";
 import Message from '../components/Message'
-import { deleteComplaint } from "../actions/complaintActions";
-
+import { deleteComplaint,updateComplaintSolved } from "../actions/complaintActions";
 const Complaints = ({ complaintData }) => {
   const options = ["Delete"];
   const ITEM_HEIGHT = 48;
@@ -29,6 +28,11 @@ const Complaints = ({ complaintData }) => {
   };
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleSolve=()=>{
+    dispatch(updateComplaintSolved(complaintData.id));
+    window.location.reload();
   };
 
   let description
@@ -98,14 +102,21 @@ const Complaints = ({ complaintData }) => {
             </Grid>
           </Grid>
           <Grid item>
-            <Grid container justifyContent="center"
-              spacing={1}>
-              <Grid item><Chip label={complaintData.issueType} color="primary" variant="outlined" /></Grid>
-              <Grid item><Chip label={complaintData.status} color="success" variant="outlined" /></Grid>
-              <Grid item><Chip label={complaintData.complaintType} color="primary" variant="outlined" /></Grid>
-              {complaintData.status === 'Assigned' && <Grid item ><Typography variant="subtitle2"><b>OTP:</b>{complaintData.otpAssigned}</Typography></Grid>}
-            </Grid>
-          </Grid>
+      <Grid container justifyContent="center" spacing={1}>
+        <Grid item><Chip label={complaintData.issueType} color="primary" variant="outlined" /></Grid>
+        <Grid item><Chip label={complaintData.status} color="success" variant="outlined" /></Grid>
+        <Grid item><Chip label={complaintData.complaintType} color="primary" variant="outlined" /></Grid>
+        {/* {complaintData.status === 'Assigned' && <Grid item ><Typography variant="subtitle2"><b>OTP:</b>{complaintData.otpAssigned}</Typography></Grid>} */}
+      </Grid>
+    </Grid>
+    <Grid item>
+      {complaintData.status === 'Assigned' && 
+        <Button variant="contained" color="primary" onClick={handleSolve}>
+          Mark as Solved
+        </Button>
+      }
+    </Grid>
+
         </Grid>
       </CardContent>
     </Card>

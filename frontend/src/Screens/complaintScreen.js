@@ -32,6 +32,7 @@ const ComplaintScreen = () => {
 
   const handleChange = (event) => {
     if (event.target.checked) {
+      console.log("hello there");
       setFilters(prevState => [...prevState, event.target.value])
     } else if (!event.target.checked) {
       setFilters(prevstate => prevstate.filter(s => s !== event.target.value))
