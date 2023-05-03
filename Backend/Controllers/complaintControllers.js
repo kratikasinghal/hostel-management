@@ -57,15 +57,19 @@ const deleteComplaint = expressAsyncHandler(async (req, res) => {
 //@desc Get complaints for resident filter by issue type and status
 //@routes /api/complaints/getByIssue
 //@access Protected
+
 const getForResident = expressAsyncHandler(async (req, res) => {
   const query = { createdBy: req.user.email };
+  
   if (Array.isArray(req.query.issueType)) {
+    // console.log("Hi i am filtering complaints by department")
     query.issueType = { $in: req.query.issueType };
   } else if (req.query.issueType) {
     query.issueType = { $in: req.query.issueType };
   }
 
   if (Array.isArray(req.query.status)) {
+    // console.log("Hi i am filtering complaints by status")
     query.status = { $in: req.query.status };
   } else if (req.query.status) {
     query.status = { $in: req.query.status };
@@ -231,9 +235,9 @@ const updateWorker = expressAsyncHandler(async (req, res) => {
   if (complaint) {
     complaint.status = Status.solved;
     complaint.save();
-    await axios.post(`http://localhost:${process.env.PORT}/api/queue`, {
-      complaintId: req.body.id,
-    });
+    // await axios.post(`http://localhost:${process.env.PORT}/api/queue`, {
+    //   complaintId: req.body.id,
+    // });
   } else {
     res.json(401);
     throw new Error("No Complaint Found!");

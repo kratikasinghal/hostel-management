@@ -86,7 +86,7 @@ const ResidentScreen = () => {
   };
 
   const handlePreviousComplaints = () => {
-    navigate('/resident/complaints')
+    navigate('/resident/complaints',{state:{ st:true}})
   }
 
   return (
