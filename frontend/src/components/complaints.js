@@ -9,6 +9,7 @@ import ListItemText from '@mui/material/ListItemText';
 import { useSelector, useDispatch } from "react-redux";
 import Message from '../components/Message'
 import { deleteComplaint,updateComplaintSolved } from "../actions/complaintActions";
+
 const Complaints = ({ complaintData }) => {
   const options = ["Delete"];
   const ITEM_HEIGHT = 48;
@@ -18,6 +19,7 @@ const Complaints = ({ complaintData }) => {
 
   const dispatch = useDispatch()
   const { success } = useSelector(state => state.deleteComplaint)
+  
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   }
@@ -30,6 +32,7 @@ const Complaints = ({ complaintData }) => {
     setAnchorEl(null);
   };
 
+  //will be called when mark as solved button will be pressed in order to make sure that complaint has been solved
   const handleSolve=()=>{
     dispatch(updateComplaintSolved(complaintData.id));
     window.location.reload();

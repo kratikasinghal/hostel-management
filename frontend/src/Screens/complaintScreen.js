@@ -33,12 +33,18 @@ const ComplaintScreen = () => {
   const handleChange = (event) => {
     if (event.target.checked) {
       console.log("hello there");
-      setFilters(prevState => [...prevState, event.target.value])
+      setFilters(prevState => [...prevState, event.target.value]);
+      // console.log(filters);
     } else if (!event.target.checked) {
       setFilters(prevstate => prevstate.filter(s => s !== event.target.value))
     }
+    
   }
 
+  const applyFilter = () => {
+    dispatch(getComplaints(filters, departmentChecked))
+  }
+  
   const [departmentChecked, setDepartmentChecked] = useState([])
 
   const handleChecked = (event, key) => {
@@ -49,19 +55,17 @@ const ComplaintScreen = () => {
     }
   }
 
+
   useEffect(() => {
     if (!userInfo)
       navigate('/login')
     if (!roles)
       dispatch(getRoles(['admin', 'resident']))
     if (!complaints)
-      dispatch(getComplaints(['Pending', 'Assigned', 'Solved'], departmentChecked))
-  }, [complaints])
+      dispatch(getComplaints(['Pending', 'Assigned', 'Solved'], departmentChecked));
+    applyFilter();
+  }, [])
 
-  const applyFilter = () => {
-    console.log(filters)
-    dispatch(getComplaints(filters, departmentChecked))
-  }
 
   return (
     <div>

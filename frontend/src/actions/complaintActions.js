@@ -82,21 +82,28 @@ const getComplaints = (filters, department) => async (dispatch, getState) => {
       },
     };
     let Data;
+    
     if (filters.length === 0 && department.length === 0)
+    {
       Data = await axios.get("/api/complaints/resident/get", config);
+    }   
     else if (filters.length === 0 && department.length !== 0)
-      Data = await axios.get(
+    {
+        Data = await axios.get(
         `/api/complaints/resident/get?issueType=${department.join(
           "&issueType="
         )}`,
         config
       );
+    }
     else if (filters.length !== 0 && department.length === 0)
+    {
       Data = await axios.get(
         `/api/complaints/resident/get?status=${filters.join("&status=")}`,
         config
       );
-    else
+    }
+    else 
       Data = await axios.get(
         `/api/complaints/resident/get?status=${filters.join(
           "&status="
