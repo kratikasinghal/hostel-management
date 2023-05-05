@@ -1,10 +1,11 @@
-import { createComplaint, deleteComplaint, getForAdmin, getForResident, updateAdmin, updateWorker, getForWorker } from "../Controllers/complaintControllers.js";
+import { createComplaint, deleteComplaint, getForAdmin, getForResident, updateAdmin, updateWorker, getForWorker ,invalidComplaint } from "../Controllers/complaintControllers.js";
 import express from "express";
 import { protect, admin } from '../Middleware/authMiddleware.js'
 const router = express.Router()
 
 router.post('/create', protect, createComplaint)
 router.patch('/delete/:id', protect, deleteComplaint)
+router.patch('/invalid/:id',protect,invalidComplaint)
 router.get('/resident/get', protect, getForResident)
 router.get('/admin/get', protect, admin, getForAdmin)
 router.get('/worker/get', protect, getForWorker)
