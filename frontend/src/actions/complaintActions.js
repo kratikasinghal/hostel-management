@@ -164,6 +164,43 @@ const deleteComplaint = (id) => async (dispatch, getState) => {
   }
 };
 
+const ComplaintInvalid = (id) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: DELETE_COMPLAINT_REQUEST,
+    });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.patch(
+      `/api/complaints/invalid/${id}`,
+      {},
+      config
+    );
+
+    dispatch({
+      type: DELETE_COMPLAINT_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: DELETE_COMPLAINT_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
 const getComplaintsWorker = (status) => async (dispatch, getState) => {
   try {
     dispatch({
@@ -347,4 +384,5 @@ export {
   updateComplaintSolved,
   getComplaintsAdmin,
   updateComplaintAssigned,
+  ComplaintInvalid,
 };

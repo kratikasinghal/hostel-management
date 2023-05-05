@@ -12,7 +12,7 @@ import {
   Button,
 } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
-import { updateComplaintAssigned } from "../actions/complaintActions";
+import { updateComplaintAssigned , ComplaintInvalid } from "../actions/complaintActions";
 import Message from "./Message";
 import TooltipComponent from "./TooltipComponent";
 import Stack from '@mui/material/Stack';
@@ -47,6 +47,12 @@ const ComplaintAdmin = ({ complaintData, allWorkers }) => {
     dispatch(updateComplaintAssigned(complaintData.id, assignTo));
     window.location.reload();
   };
+
+  //Added Marked Invalid functionality
+  const MarkedInvalid=()=>{
+    dispatch(ComplaintInvalid(complaintData.id));
+    window.location.reload();
+  }
   return (
     <div>
       {success && (
@@ -115,7 +121,7 @@ const ComplaintAdmin = ({ complaintData, allWorkers }) => {
             variant="contained"
             color="error"
             sx={{ marginLeft: "75%" }}
-            onClick={handleAssign}
+            onClick={MarkedInvalid}
           >
             MARK AS INVALID
             </Button>

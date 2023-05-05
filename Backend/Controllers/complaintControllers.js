@@ -42,7 +42,26 @@ const createComplaint = expressAsyncHandler(async (req, res) => {
 //@desc Delete a complaint
 //@route /api/complaints/delete/:id
 //@access Protected
+
+
+//Functionality to delete the complaints from database
 const deleteComplaint = expressAsyncHandler(async (req, res) => {
+    Complaint.findByIdAndDelete(req.params.id,(err,deletedDoc)=>{
+      if(err)
+      {
+        res.json(401);
+        console.log(err);
+        throw new Error("No Complaint Found!");
+      }
+      else
+      {
+        res.json({ message: "Complaint Deleted" });
+      }
+  });
+});
+
+//Added invalid complaint functionality which will be triggered when admin marks complaint invalid
+const invalidComplaint = expressAsyncHandler(async (req, res) => {
   const complaint = await Complaint.findById(req.params.id);
   if (complaint) {
     complaint.status = Status.deferred;
@@ -51,7 +70,7 @@ const deleteComplaint = expressAsyncHandler(async (req, res) => {
     res.json(401);
     throw new Error("No Complaint Found!");
   }
-  res.json({ message: "Complaint Deleted" });
+  res.json({ message: "Complaint Marked invalid" });
 });
 
 //@desc Get complaints for resident filter by issue type and status
@@ -286,4 +305,5 @@ export {
   updateAdmin,
   updateWorker,
   getForWorker,
+  invalidComplaint,
 };

@@ -26,7 +26,7 @@ const Complaints = ({ complaintData }) => {
 
   const handleDelete = (event) => {
     dispatch(deleteComplaint(complaintData.id))
-
+    window.location.reload();
   };
   const handleClose = () => {
     setAnchorEl(null);
