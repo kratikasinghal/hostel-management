@@ -11,7 +11,7 @@ const sendEmail = async (complaintData) => {
     apiKey.apiKey = process.env.EMAILER_API_KEY;
     const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
     const sender = {
-      email: "ishaagarwal772000@gmail.com",
+      email: "kratika.singhal10@gmail.com",
     };
     const createdByReciever = [{ email: complaintData.createdBy }];
     const usersData = await User.find({
